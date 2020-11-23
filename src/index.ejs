@@ -3,6 +3,8 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.3.2/highlight.min.js"></script>
+
     <title><%= SITE_TITLE %></title>
   </head>
   <body>
@@ -11,8 +13,8 @@
         <div class="auth__form-container" id="login-popup">
           <div class="auth__form">
             <div class="auth__logo">Login</div>
-            <input type="text" class="auth__input" id="login-email"/>
-            <input type="text" class="auth__input" id="login-password"/>
+            <input type="text" class="auth__input" id="login-email" />
+            <input type="text" class="auth__input" id="login-password" />
             <div class="auth__group-button">
               <div class="auth__btn" id="login-request">Login</div>
               <div class="auth__btn" id="login-popup-close">Cancel</div>
@@ -27,15 +29,91 @@
       <div class="page">
         <div class="page__header"><%= HEADER_TITLE %></div>
         <div class="page__content">
-          <div id="entities"></div>
 
-          <!-- <img src="<%= require('./bomb.jpg') %>"> -->
-
-          <div class="page__text-block _anim_item">
-            <div class="page__text-block-title">
-              Lorem, ipsum dolor sit amet consectetur adipisicing elit.
+          
+          <div id="posts">
+            <div class="page__text-block _anim_item">
+              <div class="page__text-block-title">
+                Lorem, ipsum dolor sit amet consectetur adipisicing elit.
+              </div>
+              <div class="page__text-block-content">
+                Exploring and understanding team, legacy, or foreign projects
+                takes a lot of time and effort. GoLand code navigation helps you
+                get around with instant switching to shadowed methods,
+                implementations, usages, declarations, or interfaces implemented
+                by types. Jump between types, files or any other symbols, or
+                find their usages and examine them with convenient grouping by
+                usage type
+              </div>
             </div>
-            <div class="page__text-block-content">
+
+            <div class="page__text-block _anim_item">
+              <div class="page__text-block-title">
+                Lorem, ipsum dolor sit amet consectetur adipisicing elit.
+              </div>
+              <div class="page__text-block-content">
+                Exploring and understanding team, legacy, or foreign projects
+                takes a lot of time and effort. GoLand code navigation helps you
+                get around with instant switching to shadowed methods,
+                implementations, usages, declarations, or interfaces implemented
+                by types. Jump between types, files or any other symbols, or
+                find their usages and examine them with convenient grouping by
+                usage type
+              </div>
+            </div>
+
+            <div class="page__text-block _anim_item">
+              <div class="page__text-block-title">
+                Lorem, ipsum dolor sit amet consectetur adipisicing elit.
+              </div>
+              <div class="page__text-block-content">
+                Exploring and understanding team, legacy, or foreign projects
+                takes a lot of time and effort. GoLand code navigation helps you
+                get around with instant switching to shadowed methods,
+                implementations, usages, declarations, or interfaces implemented
+                by types. Jump between types, files or any other symbols, or
+                find their usages and examine them with convenient grouping by
+                usage type
+              </div>
+            </div>
+
+            <div class="page__text-block _anim_item">
+              <div class="page__text-block-title">
+                Lorem, ipsum dolor sit amet consectetur adipisicing elit.
+              </div>
+              <div class="page__text-block-content">
+                Exploring and understanding team, legacy, or foreign projects
+                takes a lot of time and effort. GoLand code navigation helps you
+                get around with instant switching to shadowed methods,
+                implementations, usages, declarations, or interfaces implemented
+                by types. Jump between types, files or any other symbols, or
+                find their usages and examine them with convenient grouping by
+                usage type
+              </div>
+            </div>
+
+            <div class="page__text-block _anim_item">
+              <div class="page__text-block-title">
+                Lorem, ipsum dolor sit amet consectetur adipisicing elit.
+              </div>
+              <div class="page__text-block-content">
+                Exploring and understanding team, legacy, or foreign projects
+                takes a lot of time and effort. GoLand code navigation helps you
+                get around with instant switching to shadowed methods,
+                implementations, usages, declarations, or interfaces implemented
+                by types. Jump between types, files or any other symbols, or
+                find their usages and examine them with convenient grouping by
+                usage type Lorem ipsum dolor sit amet consectetur adipisicing
+                elit. Minima tempora veniam aspernatur voluptatibus quam culpa,
+                possimus sunt totam, consectetur iste corrupti sapiente
+                cupiditate unde distinctio iure. Totam animi aut voluptate?
+              </div>
+            </div>
+
+            <div class="page__text-block _anim_item">
+              <div class="page__text-block-title">
+                Lorem, ipsum dolor sit amet consectetur adipisicing elit.
+              </div>
               Exploring and understanding team, legacy, or foreign projects
               takes a lot of time and effort. GoLand code navigation helps you
               get around with instant switching to shadowed methods,
@@ -44,13 +122,43 @@
               their usages and examine them with convenient grouping by usage
               type
             </div>
-          </div>
 
-          <div class="page__text-block _anim_item">
-            <div class="page__text-block-title">
-              Lorem, ipsum dolor sit amet consectetur adipisicing elit.
+            <div class="page__text-block _anim_item">
+              <div class="page__text-block-title">
+                Lorem, ipsum dolor sit amet consectetur adipisicing elit.
+              </div>
+              Lorem ipsum, dolor sit amet consectetur adipisicing elit. Rerum
+              error aspernatur expedita. Consequuntur perferendis veniam
+              ducimus, excepturi laborum est modi veritatis earum cumque,
+              voluptatem repellendus aperiam aspernatur quod quaerat eos!Rem,
+              repellat qui nesciunt repudiandae quod quasi nulla quaerat
+              perferendis ut, iure blanditiis in maiores distinctio ipsa
+              quibusdam ullam non, veniam harum at necessitatibus velit
+              cupiditate facilis. Molestiae, itaque consequatur.
             </div>
-            <div class="page__text-block-content">
+
+            <div class="page__text-block _anim_item">
+              <div class="page__text-block-title">
+                Lorem, ipsum dolor sit amet consectetur adipisicing elit.
+              </div>
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Error sed
+              assumenda odit quaerat in quia iusto labore repellat. Maiores
+              fugit beatae maxime sunt asperiores consequatur libero fuga
+              voluptatem, hic accusantium? Lorem ipsum, dolor sit amet
+              consectetur adipisicing elit. Rerum error aspernatur expedita.
+              Consequuntur perferendis veniam ducimus, excepturi laborum est
+              modi veritatis earum cumque, voluptatem repellendus aperiam
+              aspernatur quod quaerat eos!Rem, repellat qui nesciunt repudiandae
+              quod quasi nulla quaerat perferendis ut, iure blanditiis in
+              maiores distinctio ipsa quibusdam ullam non, veniam harum at
+              necessitatibus velit cupiditate facilis. Molestiae, itaque
+              consequatur.
+            </div>
+
+            <div class="page__text-block _anim_item">
+              <div class="page__text-block-title">
+                Lorem, ipsum dolor sit amet consectetur adipisicing elit.
+              </div>
               Exploring and understanding team, legacy, or foreign projects
               takes a lot of time and effort. GoLand code navigation helps you
               get around with instant switching to shadowed methods,
@@ -59,13 +167,11 @@
               their usages and examine them with convenient grouping by usage
               type
             </div>
-          </div>
 
-          <div class="page__text-block _anim_item">
-            <div class="page__text-block-title">
-              Lorem, ipsum dolor sit amet consectetur adipisicing elit.
-            </div>
-            <div class="page__text-block-content">
+            <div class="page__text-block _anim_item">
+              <div class="page__text-block-title">
+                Lorem, ipsum dolor sit amet consectetur adipisicing elit.
+              </div>
               Exploring and understanding team, legacy, or foreign projects
               takes a lot of time and effort. GoLand code navigation helps you
               get around with instant switching to shadowed methods,
@@ -74,109 +180,11 @@
               their usages and examine them with convenient grouping by usage
               type
             </div>
-          </div>
-
-          <div class="page__text-block _anim_item">
-            <div class="page__text-block-title">
-              Lorem, ipsum dolor sit amet consectetur adipisicing elit.
-            </div>
-            <div class="page__text-block-content">
-              Exploring and understanding team, legacy, or foreign projects
-              takes a lot of time and effort. GoLand code navigation helps you
-              get around with instant switching to shadowed methods,
-              implementations, usages, declarations, or interfaces implemented
-              by types. Jump between types, files or any other symbols, or find
-              their usages and examine them with convenient grouping by usage
-              type
-            </div>
-          </div>
-
-          <div class="page__text-block _anim_item">
-            <div class="page__text-block-title">
-              Lorem, ipsum dolor sit amet consectetur adipisicing elit.
-            </div>
-            <div class="page__text-block-content">
-              Exploring and understanding team, legacy, or foreign projects
-              takes a lot of time and effort. GoLand code navigation helps you
-              get around with instant switching to shadowed methods,
-              implementations, usages, declarations, or interfaces implemented
-              by types. Jump between types, files or any other symbols, or find
-              their usages and examine them with convenient grouping by usage
-              type Lorem ipsum dolor sit amet consectetur adipisicing elit.
-              Minima tempora veniam aspernatur voluptatibus quam culpa, possimus
-              sunt totam, consectetur iste corrupti sapiente cupiditate unde
-              distinctio iure. Totam animi aut voluptate?
-            </div>
-          </div>
-
-          <div class="page__text-block _anim_item">
-            <div class="page__text-block-title">
-              Lorem, ipsum dolor sit amet consectetur adipisicing elit.
-            </div>
-            Exploring and understanding team, legacy, or foreign projects takes
-            a lot of time and effort. GoLand code navigation helps you get
-            around with instant switching to shadowed methods, implementations,
-            usages, declarations, or interfaces implemented by types. Jump
-            between types, files or any other symbols, or find their usages and
-            examine them with convenient grouping by usage type
-          </div>
-
-          <div class="page__text-block _anim_item">
-            <div class="page__text-block-title">
-              Lorem, ipsum dolor sit amet consectetur adipisicing elit.
-            </div>
-            Lorem ipsum, dolor sit amet consectetur adipisicing elit. Rerum
-            error aspernatur expedita. Consequuntur perferendis veniam ducimus,
-            excepturi laborum est modi veritatis earum cumque, voluptatem
-            repellendus aperiam aspernatur quod quaerat eos!Rem, repellat qui
-            nesciunt repudiandae quod quasi nulla quaerat perferendis ut, iure
-            blanditiis in maiores distinctio ipsa quibusdam ullam non, veniam
-            harum at necessitatibus velit cupiditate facilis. Molestiae, itaque
-            consequatur.
-          </div>
-
-          <div class="page__text-block _anim_item">
-            <div class="page__text-block-title">
-              Lorem, ipsum dolor sit amet consectetur adipisicing elit.
-            </div>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Error sed
-            assumenda odit quaerat in quia iusto labore repellat. Maiores fugit
-            beatae maxime sunt asperiores consequatur libero fuga voluptatem,
-            hic accusantium? Lorem ipsum, dolor sit amet consectetur adipisicing
-            elit. Rerum error aspernatur expedita. Consequuntur perferendis
-            veniam ducimus, excepturi laborum est modi veritatis earum cumque,
-            voluptatem repellendus aperiam aspernatur quod quaerat eos!Rem,
-            repellat qui nesciunt repudiandae quod quasi nulla quaerat
-            perferendis ut, iure blanditiis in maiores distinctio ipsa quibusdam
-            ullam non, veniam harum at necessitatibus velit cupiditate facilis.
-            Molestiae, itaque consequatur.
-          </div>
-
-          <div class="page__text-block _anim_item">
-            <div class="page__text-block-title">
-              Lorem, ipsum dolor sit amet consectetur adipisicing elit.
-            </div>
-            Exploring and understanding team, legacy, or foreign projects takes
-            a lot of time and effort. GoLand code navigation helps you get
-            around with instant switching to shadowed methods, implementations,
-            usages, declarations, or interfaces implemented by types. Jump
-            between types, files or any other symbols, or find their usages and
-            examine them with convenient grouping by usage type
-          </div>
-
-          <div class="page__text-block _anim_item">
-            <div class="page__text-block-title">
-              Lorem, ipsum dolor sit amet consectetur adipisicing elit.
-            </div>
-            Exploring and understanding team, legacy, or foreign projects takes
-            a lot of time and effort. GoLand code navigation helps you get
-            around with instant switching to shadowed methods, implementations,
-            usages, declarations, or interfaces implemented by types. Jump
-            between types, files or any other symbols, or find their usages and
-            examine them with convenient grouping by usage type
           </div>
         </div>
       </div>
     </div>
+
+
   </body>
 </html>

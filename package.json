@@ -12,7 +12,7 @@
   "author": "Avakumov Vladimir",
   "license": "ISC",
   "dependencies": {
-    "style-loader": "^2.0.0"
+    "remarkable": "^2.0.1"
   },
   "devDependencies": {
     "css-loader": "^5.0.0",

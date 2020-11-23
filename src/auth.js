@@ -90,7 +90,7 @@ const postData = async (url = "", data = {}) => {
         'Content-Type': 'application/json'
         // 'Content-Type': 'application/x-www-form-urlencoded',
       },
-    body: await JSON.stringify(data),
+    body: JSON.stringify(data),
   });
   return res;
 };
