@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.3.2/highlight.min.js"></script>
+
+    <title>Admin <%= SITE_TITLE %></title>
+  </head>
+  <body>
+    <div class="container">
+      <div class="page">
+        <div class="admin-form">
+          <div class="admin-form__container-input-list">
+            <input
+              list="admin-tags-notes"
+              width="10"
+              class="admin-form__input-list"
+              id="admin-current-tag"
+              
+            />
+            <datalist id="admin-tags-notes">
+                <!-- insert options by javascript. Data must recived from server -->
+            </datalist>
+          </div>
+          <div>
+            <textarea
+              rows="5"
+              cols="50"
+              class="admin-form__textarea"
+              id="admin-textarea-new-note"
+            ></textarea>
+          </div>
+        </div>
+
+        <div class="admin-notes" id="admin-notes" >
+
+          <div class="admin-notes__item _anim_item" >
+              <!-- js insert notes from server -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

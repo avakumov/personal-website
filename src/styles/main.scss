@@ -1,9 +1,11 @@
-@import 'reset.css';
-@import 'night-owl.css';
 
-$textColor: rgb(168, 167, 167);
-$textColorContrast: rgb(255, 255, 255);
-$bgColor: #252525;
+//variables
+@import './utils/vars.scss';
+@import './utils/reset.css';
+@import './libs/night-owl.css';
+@import 'admin.scss';
+
+
 
 @font-face {
   font-family: "Gotham-ligth";
@@ -70,10 +72,10 @@ $bgColor: #252525;
 
 
 .page__content {
+  position: relative;
   text-align: center;
   margin-top: 12px;
   letter-spacing: 0.5px;
-  
 }
 
 .page {
@@ -82,6 +84,19 @@ $bgColor: #252525;
   align-items: center;
   max-width: 1000px;
   margin: 0 auto;
+}
+
+.page__menu {
+  position: fixed;
+  top: 200px;
+  left: 200px;
+  line-height: 30px;
+  width: 200px;
+}
+.page__menu-item {
+  cursor: pointer;
+  background-color: rgb(90, 81, 5);
+  margin-bottom: 5px;
 }
 
 .container {
@@ -146,12 +161,111 @@ body {
   
 }
 
-@media (max-width: 1000px) {
+@media (max-width: 1800px) {
+  .page__menu {
+    left: 100px;
+  }
+}
+@media (max-width: 1700px) {
+  .page__menu {
+    left: 80px;
+  }
+}
+@media (max-width: 1500px) {
+  .page__menu {
+    left: 50px;
+  }
+}
+@media (max-width: 1450px) {
+  .page__menu {
+    left: 50px;
+  }
+  .page__text-block {
+    width: 900px;
+  }
+}
+@media (max-width: 1400px) {
+  .page__menu {
+    left: 30px;
+  }
+}
+
+@media (max-width: 1350px) {
+  .page__menu {
+    left: 30px;
+  }
+  .page__text-block {
+    width: 800px;
+  }
+}
+@media (max-width: 1250px) {
+  .page__menu {
+    left: 30px;
+  }
   .page__text-block {
     width: 700px;
   }
 }
+@media (max-width: 1150px) {
+  .page__menu {
+    width: 150px;
+  }
+}
+@media (max-width: 1050px) {
+  .page__menu {
+    width: 150px;
+  }
+    .page__text-block {
+      width: 600px;
+    }
+}
+@media (max-width: 950px) {
+  .page__menu {
+    width: 130px;
+  }
+}
+@media (max-width: 820px) {
+  .page__menu {
+    width: 100px;
+  }
+  .page__text-block {
+    width: 570px;
+  }
+}
+@media (max-width: 880px) {
+  .page__menu {
+    width: 100px;
+  }
+  .page__text-block {
+    width: 550px;
+  }
+}
+@media (max-width: 760px) {
+  .page__menu {
+    width: 100px;
+  }
+  .page__text-block {
+    width: 500px;
+  }
+}
+
 @media (max-width: 700px) {
+  .page__menu {
+    width: 100px;
+  }
+  .page__text-block {
+    width: 450px;
+  }
+}
+@media (max-width: 650px) {
+  .page__menu {
+    display: none;
+  }
+  .page__text-block {
+    width: 450px;
+  }
+}
+@media (max-width: 500px) {
   .page__text-block {
     width: 400px;
   }

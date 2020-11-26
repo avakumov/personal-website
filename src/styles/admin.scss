@@ -1,0 +1,48 @@
+//variables
+@import './utils/vars.scss';
+
+
+.admin-form {
+    display: flex;
+}
+.admin-form__container-input-list {
+    margin-right: 20px;
+}
+.admin-form {
+    margin-top: 20px;
+}
+%text-shared {
+    color: $textColor;
+    font-size: 15px;
+    letter-spacing: 0.5px;
+    font-weight: 700;
+}
+
+%input-shared {
+    @extend %text-shared;
+    padding: 5px 10px 5px 10px;
+    border: $textColor solid 1px;
+    background-color: $bgColor;
+}
+
+.admin-form__input-list {
+    @extend %input-shared;
+    width: 150px;
+    &.error {
+        color: brown;
+    }
+}
+.admin-form__textarea {
+    @extend %input-shared;
+}
+.admin-notes__item {
+    @extend %text-shared;
+    padding-bottom: 10px;
+    &.error {
+        color: brown;
+    }
+
+}
+.admin-notes {
+    padding-top: 20px;
+}

@@ -1,3 +1,5 @@
+import {postData} from './utils'
+
 function init() {
   const el = document.getElementById("auth-btn");
   el ? el.addEventListener("click", loginPopupOpen) : "";
@@ -83,17 +85,7 @@ const loginRequest = () => {
     });
 };
 
-const postData = async (url = "", data = {}) => {
-  const res = await fetch(url, {
-    method: "POST",
-    headers: {
-        'Content-Type': 'application/json'
-        // 'Content-Type': 'application/x-www-form-urlencoded',
-      },
-    body: JSON.stringify(data),
-  });
-  return res;
-};
+
 
 export const auth = {
   init,

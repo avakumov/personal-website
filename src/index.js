@@ -2,14 +2,18 @@ import "./styles/main.scss"
 import { api } from "./services/api"
 import { toHtml } from "./services/remark"
 import { auth } from "./auth"
+import { menu } from "./menu"
+import { admin } from "./admin"
 
 //выполняется запрос постов
 let isFetchingPosts = false
-
 //постов больше нет, true если последний запрос вернул пустой список
 let noMorePosts = false
 
+
 auth.init()
+menu.init()
+admin.init()
 
 //Функция создание счетчика
 function createPageCounter() {
@@ -25,19 +29,6 @@ const getPagePost = createPageCounter()
 const p = getComputedStyle(document.documentElement).getPropertyValue(
   "--entity"
 )
-
-api.getEntities().then((entities) => {
-  const mapedEntities = entities.map((entity) => {
-    return {
-      id: entity._id,
-      title: entity.name,
-    }
-  })
-  mapedEntities.map((entity) => {
-    addElement(entity.title)
-  })
-  console.log(mapedEntities)
-})
 
 //Прослушка скролла на запрос новых постов
 window.addEventListener("scroll", () => {
@@ -98,7 +89,6 @@ window.addEventListener("scroll", () => animateOnScroll(100))
 
 function animateOnScroll(deltaY) {
   const animItems = document.querySelectorAll("._anim_item")
-
   animItems.forEach((el, index) => {
     const ItemRect = el.getBoundingClientRect()
     const topItem = ItemRect.top

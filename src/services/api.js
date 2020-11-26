@@ -1,4 +1,4 @@
-
+import {postData} from '../utils'
 
 const getPosts= (page) => {
   return fetch(`http://localhost:3001/api/post/${page}`)
@@ -6,7 +6,33 @@ const getPosts= (page) => {
 .then(data => data.data)
 }
 
+const getTags= () => {
+  return fetch(`http://localhost:3001/api/tag/`)
+.then(response => response.json())
+.then(data => data.data)
+}
+
+const getNotes= () => {
+  return fetch(`http://localhost:3001/api/note/`)
+.then(response => response.json())
+.then(data => data.data)
+}
+
+const postTag = (tagName) => {
+  return postData("http://localhost:3001/api/tag", {name: tagName})
+    .then((data) => data.json())
+}
+
+const postNote = (note) => {
+  return postData("http://localhost:3001/api/note", note)
+    .then((data) => data.json())
+}
+
 
 export const api = {
-    getPosts
+    getPosts,
+    getTags,
+    getNotes,
+    postTag,
+    postNote
 }

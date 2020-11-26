@@ -24,6 +24,12 @@ module.exports = {
       title: "HTML webpack plugin",
       templateParameters: globals,
     }),
+    new htmlWebpackPlugin({
+      filename: "adm/index.html",
+      template: "src/admin.ejs",
+      title: "Admin page",
+      templateParameters: globals,
+    }),
     new miniCss({
       filename: "style.css",
     }),
