@@ -5,6 +5,20 @@ const state = {
   currentTag: "",
 }
 
+//prepare state.tags 
+api.getTags().then((tags) => {
+  state.tags = tags
+})
+.catch((err) => console.log(err))
+
+
+
+
+function getTagNameById(id) {
+    const [tag] = state.tags.filter(tag => tag._id === id)
+    return tag?tag.name:""
+}
+
 function init() {
   //add event listener for add note
   const textareNewNote = document.getElementById("admin-textarea-new-note")
@@ -15,7 +29,6 @@ function init() {
 
   //add event listener for changed input
   inputNewTag.addEventListener("input", () => {
-    console.log(document.getElementById(admin_current_tag).value)
     const tagText = document.getElementById(admin_current_tag).value
 
     //add tag to state.current if exist in the database
@@ -79,7 +92,16 @@ function renderNote(note) {
   const noteDiv = document.createElement("div")
   noteDiv.classList.add("admin-notes__item")
   noteDiv.classList.add("_anim_item")
-  noteDiv.innerHTML = note.name
+    //TODO add styles to note (tag, note)
+  const noteTagDiv = document.createElement("div")
+  noteTagDiv.innerHTML = getTagNameById(note.tag)
+
+  const noteName = document.createElement("div")
+  noteName.innerHTML = note.name
+
+  noteDiv.append(noteTagDiv)
+  noteDiv.append(noteName)
+
   document.getElementById("admin-notes").prepend(noteDiv)
 }
 
@@ -104,9 +126,9 @@ function onAddNote(e) {
         .postNote(newPost)
         .then((res) => {
           if (res.success) {
-              //render new note then go back from api
+            //render new note then go back from api
             renderNote(res.data)
-            document.getElementById("admin-textarea-new-note").innerText = ''
+            document.getElementById("admin-textarea-new-note").value = ""//TODO fix clear
           }
         })
         .catch((err) => {

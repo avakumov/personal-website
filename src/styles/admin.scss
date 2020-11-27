@@ -42,6 +42,21 @@
         color: brown;
     }
 
+  //animation on scroll
+  transform: translate(0px, 0px);
+  opacity: 1;
+  transition: all 0.4s;
+    &._down-hidden{
+        transform: translate(0px, 50px) rotate(5deg);
+        transform-origin: top left;
+        opacity: 0;
+    }
+    &._up-hidden {
+        transform: translate(0px, -50px) rotate(-5deg);
+        transform-origin: bottom left;
+        opacity: 0;
+    }
+
 }
 .admin-notes {
     padding-top: 20px;
