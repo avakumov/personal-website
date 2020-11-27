@@ -5,18 +5,17 @@ const state = {
   currentTag: "",
 }
 
-//prepare state.tags 
-api.getTags().then((tags) => {
-  state.tags = tags
-})
-.catch((err) => console.log(err))
-
-
-
+//prepare state.tags
+api
+  .getTags()
+  .then((tags) => {
+    state.tags = tags
+  })
+  .catch((err) => console.log(err))
 
 function getTagNameById(id) {
-    const [tag] = state.tags.filter(tag => tag._id === id)
-    return tag?tag.name:""
+  const [tag] = state.tags.filter((tag) => tag._id === id)
+  return tag ? tag.name : ""
 }
 
 function init() {
@@ -38,18 +37,30 @@ function init() {
 
   //add event listener for add tag. Tag added by press Enter.
   inputNewTag.addEventListener("keypress", (e) => {
+    const newTag = document.getElementById(admin_current_tag)
+
+    //clear blink classes
+    newTag.classList.remove("blink-ok")
+    newTag.classList.remove("blink-error")
+
     if (e.key === "Enter") {
       e.preventDefault()
-      const newTag = document.getElementById(admin_current_tag).value
       api
-        .postTag(newTag)
-        .then((data) => {
-          if (data.success) {
-            //TODO add green blink border on tags input
+        .postTag(newTag.value)
+        .then((res) => {
+          if (res.success) {
+            //blink on success
+            renderTag(res.data)
+            newTag.classList.add("blink-ok")
+          } else {
+            //blink error
+            newTag.classList.add("blink-error")
           }
         })
         .catch((err) => {
-          //TODO error render
+          //blink on error
+          newTag.classList.add("blink-error")
+          console.log("ERROR: ", err)
         })
     }
   })
@@ -76,10 +87,10 @@ function init() {
     .catch((err) => renderErrorTag(err))
 }
 
-function renderTag(note) {
+function renderTag(tag) {
   const tagOption = document.createElement("option")
-  tagOption.innerText = note.name
-  document.getElementById("admin-tags-notes").appendChild(tagOption)
+  tagOption.innerText = tag.name
+  document.getElementById("admin-tags-notes").prepend(tagOption)
 }
 
 function renderErrorTag(err) {
@@ -92,7 +103,7 @@ function renderNote(note) {
   const noteDiv = document.createElement("div")
   noteDiv.classList.add("admin-notes__item")
   noteDiv.classList.add("_anim_item")
-    //TODO add styles to note (tag, note)
+  //TODO add styles to note (tag, note)
   const noteTagDiv = document.createElement("div")
   noteTagDiv.innerHTML = getTagNameById(note.tag)
 
@@ -128,7 +139,7 @@ function onAddNote(e) {
           if (res.success) {
             //render new note then go back from api
             renderNote(res.data)
-            document.getElementById("admin-textarea-new-note").value = ""//TODO fix clear
+            document.getElementById("admin-textarea-new-note").value = "" //TODO fix clear
           }
         })
         .catch((err) => {
