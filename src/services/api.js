@@ -12,8 +12,13 @@ const getTags= () => {
 .then(data => data.data)
 }
 
-const getNotes= () => {
-  return fetch(`http://localhost:3001/api/note/`)
+const getNotes= (filter=false) => {
+  let endURL = ''
+  if (filter) {
+    const {tagId} = filter
+    endURL = `byTag/${tagId}`
+  }
+  return fetch(`http://localhost:3001/api/note/${endURL}`)
 .then(response => response.json())
 .then(data => data.data)
 }

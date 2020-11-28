@@ -57,6 +57,7 @@
 }
 .admin-notes__item {
   @extend %text-shared;
+  display: flex;
   padding-bottom: 10px;
   &.error {
     color: brown;
@@ -77,6 +78,18 @@
     opacity: 0;
   }
 }
+
+.admin-notes__item-tag {
+  font-weight: 200;
+  width: 150px;
+  margin-right: 20px;
+  text-align: right;
+}
+
+.admin-notes__item-name {
+  width: 537px;
+}
+
 .admin-notes {
   padding-top: 20px;
 }

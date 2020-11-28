@@ -1,90 +1,31 @@
 import { api } from "./services/api"
+//classes 
+const CURRENT_TAG_ID = "admin-current-tag"
+const NOTES_ID = "admin-notes"
 
 const state = {
   tags: [],
   currentTag: "",
 }
 
-//prepare state.tags
-api
-  .getTags()
-  .then((tags) => {
-    state.tags = tags
-  })
-  .catch((err) => console.log(err))
-
-function getTagNameById(id) {
-  const [tag] = state.tags.filter((tag) => tag._id === id)
-  return tag ? tag.name : ""
-}
 
 function init() {
   //add event listener for add note
   const textareNewNote = document.getElementById("admin-textarea-new-note")
   textareNewNote.addEventListener("keypress", (e) => onAddNote(e))
 
-  const admin_current_tag = "admin-current-tag"
-  const inputNewTag = document.getElementById(admin_current_tag)
+  
+  const inputNewTag = document.getElementById(CURRENT_TAG_ID)
 
   //add event listener for changed input
-  inputNewTag.addEventListener("input", () => {
-    const tagText = document.getElementById(admin_current_tag).value
-
-    //add tag to state.current if exist in the database
-    let [tag] = state.tags.filter((tag) => tag.name === tagText)
-    state.currentTag = tag
-  })
+  inputNewTag.addEventListener("input", onChangeInputTag )
 
   //add event listener for add tag. Tag added by press Enter.
-  inputNewTag.addEventListener("keypress", (e) => {
-    const newTag = document.getElementById(admin_current_tag)
+  inputNewTag.addEventListener("keypress", onKeyPressInputTag)
 
-    //clear blink classes
-    newTag.classList.remove("blink-ok")
-    newTag.classList.remove("blink-error")
+  renderNotes()
 
-    if (e.key === "Enter") {
-      e.preventDefault()
-      api
-        .postTag(newTag.value)
-        .then((res) => {
-          if (res.success) {
-            //blink on success
-            renderTag(res.data)
-            newTag.classList.add("blink-ok")
-          } else {
-            //blink error
-            newTag.classList.add("blink-error")
-          }
-        })
-        .catch((err) => {
-          //blink on error
-          newTag.classList.add("blink-error")
-          console.log("ERROR: ", err)
-        })
-    }
-  })
-
-  //get notes and render them or render error
-  api
-    .getNotes()
-    .then((notes) => {
-      notes.forEach((note) => {
-        renderNote(note)
-      })
-    })
-    .catch((err) => renderErrorNote(err))
-
-  //get tags and render them in input list or render error
-  api
-    .getTags()
-    .then((tags) => {
-      state.tags = tags
-      tags.forEach((tag) => {
-        renderTag(tag)
-      })
-    })
-    .catch((err) => renderErrorTag(err))
+  renderTags()
 }
 
 function renderTag(tag) {
@@ -103,17 +44,18 @@ function renderNote(note) {
   const noteDiv = document.createElement("div")
   noteDiv.classList.add("admin-notes__item")
   noteDiv.classList.add("_anim_item")
-  //TODO add styles to note (tag, note)
-  const noteTagDiv = document.createElement("div")
-  noteTagDiv.innerHTML = getTagNameById(note.tag)
 
-  const noteName = document.createElement("div")
-  noteName.innerHTML = note.name
+  const noteTagDiv = document.createElement("div")
+  noteTagDiv.classList.add("admin-notes__item-tag")
+  noteTagDiv.innerHTML = note.tag.name
+
+  const noteNameDiv = document.createElement("div")
+  noteNameDiv.classList.add("admin-notes__item-name")
+  noteNameDiv.innerHTML = note.name
 
   noteDiv.append(noteTagDiv)
-  noteDiv.append(noteName)
-
-  document.getElementById("admin-notes").prepend(noteDiv)
+  noteDiv.append(noteNameDiv)
+  document.getElementById(NOTES_ID).prepend(noteDiv)
 }
 
 function renderErrorNote(err) {
@@ -122,7 +64,7 @@ function renderErrorNote(err) {
   noteDiv.classList.add("_anim_item")
   noteDiv.classList.add("error")
   noteDiv.innerHTML = err
-  document.getElementById("admin-notes").appendChild(noteDiv)
+  document.getElementById(NOTES_ID).appendChild(noteDiv)
 }
 
 //add note by pressing Enter
@@ -139,7 +81,7 @@ function onAddNote(e) {
           if (res.success) {
             //render new note then go back from api
             renderNote(res.data)
-            document.getElementById("admin-textarea-new-note").value = "" //TODO fix clear
+            document.getElementById("admin-textarea-new-note").value = ""
           }
         })
         .catch((err) => {
@@ -147,6 +89,85 @@ function onAddNote(e) {
         })
     }
   }
+}
+
+
+function onKeyPressInputTag (e){
+  const newTag = document.getElementById(CURRENT_TAG_ID)
+
+  //clear blink classes
+  newTag.classList.remove("blink-ok")
+  newTag.classList.remove("blink-error")
+
+  if (e.key === "Enter") {
+    e.preventDefault()
+    api
+      .postTag(newTag.value)
+      .then((res) => {
+        if (res.success) {
+
+          state.tags.push(res.data)
+          state.currentTag = res.data
+          renderTag(res.data)
+
+          //blink on success
+          newTag.classList.add("blink-ok")
+        } else {
+          //blink error
+          newTag.classList.add("blink-error")
+        }
+      })
+      .catch((err) => {
+        //blink on error
+        newTag.classList.add("blink-error")
+        console.log("ERROR: ", err)
+      })
+  }
+}
+
+function onChangeInputTag () {
+  const tagText = document.getElementById(CURRENT_TAG_ID).value
+
+  //add tag to state.current if exist in the database
+  let [tag] = state.tags.filter((tag) => tag.name === tagText)
+  state.currentTag = tag
+
+  //rerender notes by filter tag
+  if (tag) {
+    rerenderNotes({tagId: tag._id})
+  }
+  
+}
+
+
+//get notes and render them or render error
+function renderNotes(filter) {
+    api
+    .getNotes(filter)
+    .then((notes) => {
+      notes.forEach((note) => {
+        renderNote(note)
+      })
+    })
+    .catch((err) => renderErrorNote(err))
+}
+
+//get tags and render them in input list or render error
+function renderTags(){
+    api
+    .getTags()
+    .then((tags) => {
+      state.tags = tags
+      tags.forEach((tag) => {
+        renderTag(tag)
+      })
+    })
+    .catch((err) => renderErrorTag(err))
+}
+
+function rerenderNotes(filter){
+  document.getElementById(NOTES_ID).innerHTML=''
+  renderNotes(filter)
 }
 
 export const admin = {
