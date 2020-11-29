@@ -5,7 +5,7 @@ import { home } from "./home"
 
 
 
-//auth.init()
+auth.init()
 
 //init different page init depending on the path
 const path = window.location.pathname.replace(/^\/|\/$/g, '')

@@ -28,7 +28,7 @@
   @extend %input-shared;
   width: 150px;
   &.error {
-    color: brown;
+    color: $TextError;
   }
   &.blink-ok {
     animation: blinkBorder-ok 0.5s linear;
@@ -40,15 +40,15 @@
 
 @keyframes blinkBorder-ok {
   50% {
-    border: greenyellow solid 1px; //TODO перенести в константы 1
-    background-color: rgb(94, 109, 80);
+    border: $blinkBorderSuccess solid 1px;
+    background-color: $blinkBackgroundSuccess;
   }
 }
 
 @keyframes blinkBorder-error {
   50% {
-    border: brown solid 1px; //TODO перенести в константы 2
-    background-color: rgb(92, 63, 52);
+    border: $blinkBorderError solid 1px;
+    background-color: $blinkBackgroundError;
   }
 }
 
@@ -60,7 +60,7 @@
   display: flex;
   padding-bottom: 10px;
   &.error {
-    color: brown;
+    color: $TextError;
   }
 
   //animation on scroll

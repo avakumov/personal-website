@@ -95,13 +95,12 @@
 }
 .page__menu-item {
   cursor: pointer;
-  background-color: rgb(90, 81, 5);
+  background-color: $bgColorMenu;
   margin-bottom: 5px;
 }
 
 .container {
-   background-color: $bgColor;
-   color: $textColor;
+
 }
 .auth__container {
   display: flex;
@@ -118,7 +117,7 @@
   position: fixed;
   width: 100%;
   height: 100%;
-  background: rgba(8, 8, 66, 0.5);
+  background: $bgColorAuthContainer;
 }
 .auth__form {
   position: fixed;
@@ -126,7 +125,7 @@
   left: 50%;
   transform: translate(-50%, -50%);
   padding: 20px;
-  background-color: $bgColor;
+  background-color: $bgColorAuth;
   display: flex;
   flex-direction: column;
 }
@@ -136,7 +135,6 @@
   margin-top: 5px;
   margin-bottom: 5px;
   align-items: center;
-  background-color: #ccc;
 }
 .auth__group-button {
   display: flex;
@@ -157,8 +155,9 @@
 
 body {
   height: 100%;
+  background-color: $bgColor;
+  color: $textColor;
   font-family: Gotham-book;
-  
 }
 
 @media (max-width: 1800px) {
