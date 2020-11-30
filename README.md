@@ -1,4 +1,5 @@
 ![GitHub commit activity](https://img.shields.io/github/commit-activity/w/avakumov/personal-website?style=for-the-badge)
+![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/avakumov/personal-website?style=for-the-badge)
 
 ### Description
 
