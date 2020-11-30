@@ -1,3 +1,5 @@
+![GitHub commit activity](https://img.shields.io/github/commit-activity/w/avakumov/personal-website?style=for-the-badge)
+
 ### Description
 
 Currently under development.
