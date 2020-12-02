@@ -80,6 +80,13 @@ function onKeyPressInputCLI(e) {
   }
   const command = e.target.value
   const [name, value] = command.split(" ")
+  
+  if (name==="tag" && !value) {
+    //rerender all notes
+    return admin.rerenderNotes()
+  }
+
+
   const tag = admin.getTagByName(value)
   //filter by tag
   if (name === "tag" && tag) {

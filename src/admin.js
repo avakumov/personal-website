@@ -128,6 +128,11 @@ function onKeyPressInputTag (e){
 function onChangeInputTag () {
   const tagName = document.getElementById(CURRENT_TAG_ID).value
 
+  //rerender all notes
+  if (tagName.length === 0) {
+    return rerenderNotes()
+  }
+
   //add tag to state.current if exist in the database
   const tag = getTagByName(tagName)
   state.currentTag = tag
