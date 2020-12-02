@@ -126,12 +126,12 @@ function onKeyPressInputTag (e){
 }
 
 function onChangeInputTag () {
-  const tagText = document.getElementById(CURRENT_TAG_ID).value
+  const tagName = document.getElementById(CURRENT_TAG_ID).value
 
   //add tag to state.current if exist in the database
-  let [tag] = state.tags.filter((tag) => tag.name === tagText)
+  const tag = getTagByName(tagName)
   state.currentTag = tag
-
+  
   //rerender notes by filter tag
   if (tag) {
     rerenderNotes({tagId: tag._id})
@@ -139,7 +139,12 @@ function onChangeInputTag () {
   
 }
 
+function getTagByName(name) {
+  let [tag] = state.tags.filter((tag) => tag.name === name)
+  return tag
+}
 
+//filter object {tagId: value}
 //get notes and render them or render error
 function renderNotes(filter) {
     api
@@ -172,4 +177,6 @@ function rerenderNotes(filter){
 
 export const admin = {
   init,
+  rerenderNotes,
+  getTagByName
 }
