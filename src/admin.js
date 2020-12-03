@@ -1,5 +1,7 @@
 import { api } from "./services/api"
-//classes 
+import { createContext } from "./hotkeys"
+
+//classes
 const CURRENT_TAG_ID = "admin-current-tag"
 const NOTES_ID = "admin-notes"
 
@@ -8,17 +10,24 @@ const state = {
   currentTag: "",
 }
 
-
 function init() {
+  //hotkeys context
+  const hotKeyContext = createContext()
+
+  //open and close cli input by hotkey
+  hotKeyContext.register("ctrl+j", (e) => {
+    e.preventDefault()
+    renderCLI()
+  })
+
   //add event listener for add note
   const textareNewNote = document.getElementById("admin-textarea-new-note")
   textareNewNote.addEventListener("keypress", (e) => onAddNote(e))
 
-  
   const inputNewTag = document.getElementById(CURRENT_TAG_ID)
 
   //add event listener for changed input
-  inputNewTag.addEventListener("input", onChangeInputTag )
+  inputNewTag.addEventListener("input", onChangeInputTag)
 
   //add event listener for add tag. Tag added by press Enter.
   inputNewTag.addEventListener("keypress", onKeyPressInputTag)
@@ -91,8 +100,7 @@ function onAddNote(e) {
   }
 }
 
-
-function onKeyPressInputTag (e){
+function onKeyPressInputTag(e) {
   const newTag = document.getElementById(CURRENT_TAG_ID)
 
   //clear blink classes
@@ -105,7 +113,6 @@ function onKeyPressInputTag (e){
       .postTag(newTag.value)
       .then((res) => {
         if (res.success) {
-
           state.tags.push(res.data)
           state.currentTag = res.data
           renderTag(res.data)
@@ -125,7 +132,7 @@ function onKeyPressInputTag (e){
   }
 }
 
-function onChangeInputTag () {
+function onChangeInputTag() {
   const tagName = document.getElementById(CURRENT_TAG_ID).value
 
   //rerender all notes
@@ -136,12 +143,11 @@ function onChangeInputTag () {
   //add tag to state.current if exist in the database
   const tag = getTagByName(tagName)
   state.currentTag = tag
-  
+
   //rerender notes by filter tag
   if (tag) {
-    rerenderNotes({tagId: tag._id})
+    rerenderNotes({ tagId: tag._id })
   }
-  
 }
 
 function getTagByName(name) {
@@ -152,7 +158,7 @@ function getTagByName(name) {
 //filter object {tagId: value}
 //get notes and render them or render error
 function renderNotes(filter) {
-    api
+  api
     .getNotes(filter)
     .then((notes) => {
       notes.forEach((note) => {
@@ -163,8 +169,8 @@ function renderNotes(filter) {
 }
 
 //get tags and render them in input list or render error
-function renderTags(){
-    api
+function renderTags() {
+  api
     .getTags()
     .then((tags) => {
       state.tags = tags
@@ -175,13 +181,48 @@ function renderTags(){
     .catch((err) => renderErrorTag(err))
 }
 
-function rerenderNotes(filter){
-  document.getElementById(NOTES_ID).innerHTML=''
+function rerenderNotes(filter) {
+  document.getElementById(NOTES_ID).innerHTML = ""
   renderNotes(filter)
+}
+
+function renderCLI() {
+  const exist = document.getElementById("input-cli")
+  if (exist) {
+    exist.remove()
+    return
+  }
+  const rootCLI = document.getElementById("admin-cli")
+  const inputCLI = document.createElement("input")
+  inputCLI.type = "text"
+  inputCLI.classList.add("page__cli")
+  inputCLI.id = "input-cli"
+
+  rootCLI.appendChild(inputCLI)
+  inputCLI.focus()
+  inputCLI.addEventListener("keypress", onKeyPressInputCLI)
+}
+
+//hadler keypress cli
+function onKeyPressInputCLI(e) {
+  if (e.key !== "Enter") {
+    return
+  }
+  const command = e.target.value
+  const [name, value] = command.split(" ")
+
+  if (name === "tag" && !value) {
+    //rerender all notes
+    return rerenderNotes() //TODO сбросить текущий тег
+  }
+
+  const tag = getTagByName(value)
+  //filter by tag
+  if (name === "tag" && tag) {
+    rerenderNotes({ tagId: tag._id })
+  }
 }
 
 export const admin = {
   init,
-  rerenderNotes,
-  getTagByName
 }

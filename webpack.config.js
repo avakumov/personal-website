@@ -3,7 +3,7 @@ const htmlWebpackPlugin = require("html-webpack-plugin");
 const miniCss = require("mini-css-extract-plugin");
 const webpack = require("webpack");
 
-const globals = require("./globals");
+const globals = require("./src/globals");
 
 const ASSET_PATH = process.env.ASSET_PATH || "";
 
