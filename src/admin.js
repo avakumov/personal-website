@@ -5,6 +5,7 @@ import { createContext } from "./hotkeys"
 const CURRENT_TAG_ID = "admin-current-tag"
 const NOTES_ID = "admin-notes"
 
+//TODO relocate state
 const state = {
   tags: [],
   currentTag: "",
@@ -212,6 +213,11 @@ function onKeyPressInputCLI(e) {
   const [name, value] = command.split(" ")
 
   if (name === "tag" && !value) {
+
+    //clear input tags and from state
+    document.getElementById(CURRENT_TAG_ID).value = ""
+    state.currentTag = ""
+
     //rerender all notes
     return rerenderNotes() //TODO сбросить текущий тег
   }
@@ -219,6 +225,10 @@ function onKeyPressInputCLI(e) {
   const tag = getTagByName(value)
   //filter by tag
   if (name === "tag" && tag) {
+    //insert tagname in input, change current name tag
+    document.getElementById(CURRENT_TAG_ID).value = tag.name
+    state.currentTag = tag
+
     rerenderNotes({ tagId: tag._id })
   }
 }
