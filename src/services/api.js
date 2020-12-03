@@ -12,10 +12,10 @@ const getTags= () => {
 .then(data => data.data)
 }
 
-const getNotes= (filter=false) => {
+const getNotes= (filter={}) => {
   let endURL = ''
-  if (filter) {
-    const {tagId} = filter
+  const {tagId} = filter
+  if (tagId) {
     endURL = `byTag/${tagId}`
   }
   return fetch(`http://localhost:3001/api/note/${endURL}`)
