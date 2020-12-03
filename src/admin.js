@@ -9,6 +9,7 @@ const NOTES_ID = "admin-notes"
 const state = {
   tags: [],
   currentTag: "",
+  showSlides: false,
 }
 
 function init() {
@@ -19,6 +20,12 @@ function init() {
   hotKeyContext.register("ctrl+j", (e) => {
     e.preventDefault()
     renderCLI()
+  })
+
+  //show slide notes by hotkey
+  hotKeyContext.register("ctrl+k", (e) => {
+    e.preventDefault()
+    showSlidesCurrentNotes()
   })
 
   //add event listener for add note
@@ -36,6 +43,54 @@ function init() {
   renderNotes()
 
   renderTags()
+}
+
+//show slides, data is [{main, optional, date}]
+//property is {interval:boolean, interval:seconds}
+//TODO realize infinite
+function showSlides(data, { infinite, interval } = { infinite: false, interval: 1 }) {
+  const rootSlides = document.getElementById("container-slides")
+  const slides = document.createElement("div")
+  slides.classList.add("show-slides")
+
+  rootSlides.appendChild(slides)
+
+  //create iterator for leaf slides
+  function* getIteratorData() {
+    yield* data
+  }
+  const iteratorSlide = getIteratorData()
+
+  const changeSlidesInterval = setInterval(() => {
+    const item = iteratorSlide.next()
+    if (item.done) {
+      return clearInterval(changeSlidesInterval)
+    }
+    //TODO add other datas on slide
+    //TODO realize first slide immediately
+    slides.innerText = item.value.main
+  }, interval * 1000)
+  return changeSlidesInterval
+}
+
+function showSlidesCurrentNotes() {
+  //if slides shows close them
+  if (state.showSlides) {
+    //TODO clear interval changeSlidesInterval
+    state.showSlides = false
+    document.getElementById("container-slides").innerHTML = ""
+    return
+  }
+  api.getNotes({ tagId: state.currentTag._id }).then((notes) => {
+    const notesMappedToSlide = notes.map((note) => ({
+      main: note.name,
+      optional: note.tag.name,
+      date: note.created_at,
+    }))
+    //TODO relocate show slides to separate components which will store interval
+    const interval = showSlides(notesMappedToSlide)
+    state.showSlides = true
+  })
 }
 
 function renderTag(tag) {
@@ -213,13 +268,12 @@ function onKeyPressInputCLI(e) {
   const [name, value] = command.split(" ")
 
   if (name === "tag" && !value) {
-
     //clear input tags and from state
     document.getElementById(CURRENT_TAG_ID).value = ""
     state.currentTag = ""
 
     //rerender all notes
-    return rerenderNotes() //TODO сбросить текущий тег
+    return rerenderNotes()
   }
 
   const tag = getTagByName(value)

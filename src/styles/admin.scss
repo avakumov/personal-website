@@ -100,3 +100,11 @@
   background-color: rgb(30, 82, 23);
   color: $textColor;
 }
+.show-slides {
+  position: fixed;
+  z-index: 5;
+  width: 100%;
+  height: 100%;
+  font-size: 50px;
+  background-color: black;
+}
