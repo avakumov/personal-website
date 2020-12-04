@@ -48,17 +48,31 @@ function init() {
 //show slides, data is [{main, optional, date}]
 //property is {interval:boolean, interval:seconds}
 //TODO realize infinite
-function showSlides(data, { infinite, interval } = { infinite: false, interval: 1 }) {
-  const rootSlides = document.getElementById("container-slides")
-  const slides = document.createElement("div")
-  slides.classList.add("show-slides")
+function showSlides(data, { infinite, interval } = { infinite: false, interval: 3 }) {
+  const rootSlides = document.getElementById("container-slide")
 
-  rootSlides.appendChild(slides)
+  const slide = document.createElement("div")
+  slide.classList.add("slide")
+  rootSlides.appendChild(slide)
+
+  const slideContainer = document.createElement("div")
+  slideContainer.classList.add("slide__container")
+  slide.prepend(slideContainer)
+
+  const slideDate = document.createElement("div")
+  slideDate.classList.add("slide__date")
+  slideContainer.prepend(slideDate)
+
+  const slideMain = document.createElement("div")
+  slideMain.classList.add("slide__main")
+  slideContainer.prepend(slideMain)
+
+  const slideOptional = document.createElement("div")
+  slideOptional.classList.add("slide__optional")
+  slideContainer.prepend(slideOptional)
 
   //create iterator for leaf slides
-  function* getIteratorData() {
-    yield* data
-  }
+  function* getIteratorData() {yield* data}
   const iteratorSlide = getIteratorData()
 
   const changeSlidesInterval = setInterval(() => {
@@ -68,11 +82,14 @@ function showSlides(data, { infinite, interval } = { infinite: false, interval: 
     }
     //TODO add other datas on slide
     //TODO realize first slide immediately
-    slides.innerText = item.value.main
+    slideDate.innerText = item.value.date.slice(0, 10)
+    slideOptional.innerText = item.value.optional
+    slideMain.innerText = item.value.main
   }, interval * 1000)
   return changeSlidesInterval
 }
 
+//TODO add mange slides arrow keys and edit on current, also pause
 function showSlidesCurrentNotes() {
   //if slides shows close them
   if (state.showSlides) {
@@ -112,11 +129,11 @@ function renderNote(note) {
 
   const noteTagDiv = document.createElement("div")
   noteTagDiv.classList.add("admin-notes__item-tag")
-  noteTagDiv.innerHTML = note.tag.name
+  noteTagDiv.innerText = note.tag.name
 
   const noteNameDiv = document.createElement("div")
   noteNameDiv.classList.add("admin-notes__item-name")
-  noteNameDiv.innerHTML = note.name
+  noteNameDiv.innerText = note.name
 
   noteDiv.append(noteTagDiv)
   noteDiv.append(noteNameDiv)
@@ -128,7 +145,7 @@ function renderErrorNote(err) {
   noteDiv.classList.add("admin-notes__item")
   noteDiv.classList.add("_anim_item")
   noteDiv.classList.add("error")
-  noteDiv.innerHTML = err
+  noteDiv.innerText = err
   document.getElementById(NOTES_ID).appendChild(noteDiv)
 }
 
@@ -213,6 +230,7 @@ function getTagByName(name) {
 
 //filter object {tagId: value}
 //get notes and render them or render error
+//TODO add number notes for refer by number to note for edit (!23 edit or !22 del)
 function renderNotes(filter) {
   api
     .getNotes(filter)
@@ -238,7 +256,7 @@ function renderTags() {
 }
 
 function rerenderNotes(filter) {
-  document.getElementById(NOTES_ID).innerHTML = ""
+  document.getElementById(NOTES_ID).innerText = ""
   renderNotes(filter)
 }
 
@@ -259,6 +277,7 @@ function renderCLI() {
   inputCLI.addEventListener("keypress", onKeyPressInputCLI)
 }
 
+//TODO add edit and delete note by number (realize number note before) (!23 edit or !22 del)
 //hadler keypress cli
 function onKeyPressInputCLI(e) {
   if (e.key !== "Enter") {

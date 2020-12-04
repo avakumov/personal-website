@@ -60,11 +60,11 @@ function addPost(post) {
 
   const titleDiv = document.createElement("div")
   titleDiv.classList.add("page__text-block-title")
-  titleDiv.innerHTML = post.title
+  titleDiv.innerText = post.title
 
   const contentDiv = document.createElement("div")
   contentDiv.classList.add("page__text-block-content")
-  contentDiv.innerHTML = toHtml(post.content)
+  contentDiv.innerText = toHtml(post.content)
 
   postDiv.appendChild(titleDiv)
   postDiv.appendChild(contentDiv)
