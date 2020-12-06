@@ -48,7 +48,6 @@ function init() {
 
 
 
-//TODO add mange slides arrow keys and edit on current, also pause
 function showSlidesCurrentNotes() {
   //if slides shows close them
   if (state.showSlides) {
