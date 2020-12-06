@@ -1,7 +1,7 @@
 import { api } from "../services/api"
 import { createContext } from "../helpers/hotkeys"
 import { showSlides } from "./slide"
-import { CURRENT_TAG_ID, NOTES_ID, SLIDES_ID } from '../globals'
+import { CURRENT_TAG_ID, NOTES_ID, SLIDES_ID, CLI_ID, TAGS_ID } from '../globals'
 
 
 
@@ -80,7 +80,7 @@ function showSlidesCurrentNotes() {
 function renderTag(tag) {
   const tagOption = document.createElement("option")
   tagOption.innerText = tag.name
-  document.getElementById("admin-tags-notes").prepend(tagOption)
+  document.getElementById(TAGS_ID).prepend(tagOption)
 }
 
 function renderErrorTag(err) {
@@ -233,7 +233,7 @@ function renderCLI() {
     exist.remove()
     return
   }
-  const rootCLI = document.getElementById("admin-cli")
+  const rootCLI = document.getElementById(CLI_ID)
   const inputCLI = document.createElement("input")
   inputCLI.type = "text"
   inputCLI.classList.add("page__cli")

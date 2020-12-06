@@ -6,5 +6,7 @@ module.exports = {
     
     CURRENT_TAG_ID: "admin-current-tag",
     NOTES_ID: "admin-notes",
-    SLIDES_ID: "container-slide"
+    SLIDES_ID: "container-slide",
+    CLI_ID: "admin-cli",
+    TAGS_ID: "admin-tags-notes"
 }

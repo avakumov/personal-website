@@ -12,21 +12,19 @@
       <!-- render slides -->
     </div>
       <div class="page">
-        <div id="admin-cli"> 
-          <!-- TODO id to global var  -->
+        <div id=<%= CLI_ID %>> 
           <!-- cli render by js -->
         </div>
         <div class="admin-form">
           <div class="admin-form__container-input-list">
             <input
-              list="admin-tags-notes"
+              list=<%= TAGS_ID %>
               width="10"
               class="admin-form__input-list"
               id=<%= CURRENT_TAG_ID %>
               
             />
-            <datalist id="admin-tags-notes">
-              <!-- TODO id to global var 2 -->
+            <datalist id=<%= TAGS_ID %>>
                 <!-- insert options by javascript. Data must recived from server -->
             </datalist>
           </div>
