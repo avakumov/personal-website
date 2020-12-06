@@ -1,4 +1,4 @@
-import {postData} from '../helpers/utils'
+import {postData, deleteData} from '../helpers/utils'
 
 const getPosts= (page) => {
   return fetch(`http://localhost:3001/api/post/${page}`)
@@ -23,6 +23,12 @@ const getNotes= (filter={}) => {
 .then(data => data.data)
 }
 
+const deletePost = (id) => {
+  return deleteData(`http://localhost:3001/api/note/${id}`)
+.then(response => response.json())
+.then(data => data.data)
+}
+
 const postTag = (tagName) => {
   return postData("http://localhost:3001/api/tag", {name: tagName})
     .then((data) => data.json())
@@ -39,5 +45,6 @@ export const api = {
     getTags,
     getNotes,
     postTag,
-    postNote
+    postNote,
+    deletePost
 }

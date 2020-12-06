@@ -1,16 +1,14 @@
 import { api } from "../services/api"
 import { createContext } from "../helpers/hotkeys"
 import { showSlides } from "./slide"
-import { CURRENT_TAG_ID, NOTES_ID, SLIDES_ID, CLI_ID, TAGS_ID } from '../globals'
-
-
+import { CURRENT_TAG_ID, NOTES_ID, SLIDES_ID, CLI_ID, TAGS_ID } from "../globals"
 
 //TODO relocate state
 const state = {
   tags: [],
   currentTag: "",
   showSlides: false,
-  intervals: []
+  intervals: [],
 }
 
 function init() {
@@ -46,20 +44,17 @@ function init() {
   renderTags()
 }
 
-
-
 function showSlidesCurrentNotes() {
   //if slides shows close them
   if (state.showSlides) {
     state.showSlides = false
 
     //stop and remove interval slide from global intervals
-    const index = state.intervals.findIndex(item => item.name === "slide")
+    const index = state.intervals.findIndex((item) => item.name === "slide")
     if (index > -1) {
       clearInterval(state.intervals[index].value)
-      state.intervals.splice(index)
+      state.intervals.splice(index, 1)
     }
-    
 
     document.getElementById(SLIDES_ID).innerHTML = ""
     return
@@ -72,7 +67,7 @@ function showSlidesCurrentNotes() {
       date: note.created_at,
     }))
     const interval = showSlides(notesMappedToSlide)
-    state.intervals.push({name: "slide", value: interval})
+    state.intervals.push({ name: "slide", value: interval })
     state.showSlides = true
   })
 }
@@ -89,20 +84,30 @@ function renderErrorTag(err) {
   inputTagList.classList.add("error")
 }
 
-function renderNote(note) {
+function renderNote(note, index) {
+  console.log(index)
   const noteDiv = document.createElement("div")
   noteDiv.classList.add("admin-notes__item")
   noteDiv.classList.add("_anim_item")
 
+  //for refer edit, delete
+  noteDiv.setAttribute("id", note._id)
+  noteDiv.setAttribute("number", index)
+
   const noteTagDiv = document.createElement("div")
   noteTagDiv.classList.add("admin-notes__item-tag")
   noteTagDiv.innerText = note.tag.name
+
+  const noteNumberDiv = document.createElement("div")
+  noteNumberDiv.classList.add("admin-notes__item-number")
+  noteNumberDiv.innerText = index
 
   const noteNameDiv = document.createElement("div")
   noteNameDiv.classList.add("admin-notes__item-name")
   noteNameDiv.innerText = note.name
 
   noteDiv.append(noteTagDiv)
+  noteDiv.append(noteNumberDiv)
   noteDiv.append(noteNameDiv)
   document.getElementById(NOTES_ID).prepend(noteDiv)
 }
@@ -123,13 +128,13 @@ function onAddNote(e) {
     const noteText = document.getElementById("admin-textarea-new-note").value
     const tagId = state.currentTag._id
     if (tagId && noteText) {
-      const newPost = { tag: tagId, name: noteText }
+      const newNote = { tag: tagId, name: noteText }
       api
-        .postNote(newPost)
+        .postNote(newNote)
         .then((res) => {
           if (res.success) {
             //render new note then go back from api
-            renderNote(res.data)
+            renderNote(res.data)//TODO index insert
             document.getElementById("admin-textarea-new-note").value = ""
           }
         })
@@ -202,8 +207,8 @@ function renderNotes(filter) {
   api
     .getNotes(filter)
     .then((notes) => {
-      notes.forEach((note) => {
-        renderNote(note)
+      notes.forEach((note, index) => {
+        renderNote(note, index)
       })
     })
     .catch((err) => renderErrorNote(err))
@@ -252,24 +257,45 @@ function onKeyPressInputCLI(e) {
   }
   const command = e.target.value
   const [name, value] = command.split(" ")
+  if (name === "tag") {
+    tagCommand(value)
+  }
+  if (name === "del") {
+    delCommand(value)
+  }
+  function tagCommand(value) {
+    if (!value) {
+      //clear input tags and from state
+      document.getElementById(CURRENT_TAG_ID).value = ""
+      state.currentTag = ""
 
-  if (name === "tag" && !value) {
-    //clear input tags and from state
-    document.getElementById(CURRENT_TAG_ID).value = ""
-    state.currentTag = ""
+      //rerender all notes
+      return rerenderNotes()
+    }
 
-    //rerender all notes
-    return rerenderNotes()
+    const tag = getTagByName(value)
+    //filter by tag
+    if (tag) {
+      //insert tagname in input, change current name tag
+      document.getElementById(CURRENT_TAG_ID).value = tag.name
+      state.currentTag = tag
+
+      rerenderNotes({ tagId: tag._id })
+    }
   }
 
-  const tag = getTagByName(value)
-  //filter by tag
-  if (name === "tag" && tag) {
-    //insert tagname in input, change current name tag
-    document.getElementById(CURRENT_TAG_ID).value = tag.name
-    state.currentTag = tag
-
-    rerenderNotes({ tagId: tag._id })
+  function delCommand(value) {
+    const number = Number.parseInt(value)
+    if (number) {
+      const el = document.querySelector(`[number="${value}"]`)
+      const id = el.getAttribute("id")
+      if (id) {
+         api.deletePost(id)
+         .then(res => console.log(res))
+         .catch(err => console.log(err))
+      }
+     
+    }
   }
 }
 
