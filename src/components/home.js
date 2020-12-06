@@ -1,5 +1,5 @@
-import { api } from "./services/api"
-import { toHtml } from "./services/remark"
+import { api } from "../services/api"
+import { toHtml } from "../services/remark"
 import { menu } from "./menu"
 
 function init() {

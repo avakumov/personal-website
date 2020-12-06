@@ -1,4 +1,4 @@
-import {postData} from '../utils'
+import {postData} from '../helpers/utils'
 
 const getPosts= (page) => {
   return fetch(`http://localhost:3001/api/post/${page}`)

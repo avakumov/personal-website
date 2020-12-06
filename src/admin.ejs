@@ -8,11 +8,12 @@
     <title>Admin <%= SITE_TITLE %></title>
   </head>
   <body>
-    <div id="container-slide">
+    <div id=<%= SLIDES_ID %>>
       <!-- render slides -->
     </div>
       <div class="page">
-        <div id="admin-cli">
+        <div id="admin-cli"> 
+          <!-- TODO id to global var  -->
           <!-- cli render by js -->
         </div>
         <div class="admin-form">
@@ -21,10 +22,11 @@
               list="admin-tags-notes"
               width="10"
               class="admin-form__input-list"
-              id="admin-current-tag"
+              id=<%= CURRENT_TAG_ID %>
               
             />
             <datalist id="admin-tags-notes">
+              <!-- TODO id to global var 2 -->
                 <!-- insert options by javascript. Data must recived from server -->
             </datalist>
           </div>
@@ -38,7 +40,7 @@
           </div>
         </div>
 
-        <div class="admin-notes" id="admin-notes" >
+        <div class="admin-notes" id=<%= NOTES_ID %>>
 
           <div class="admin-notes__item _anim_item" >
               <!-- js insert notes from server -->

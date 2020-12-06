@@ -1,8 +1,8 @@
 import "./styles/main.scss"
-import { auth } from "./auth"
-import { admin } from "./admin"
-import { home } from "./home"
-import { animateOnScroll } from "./utils"
+import { auth } from "./components/auth"
+import { admin } from "./components/admin"
+import { home } from "./components/home"
+import { animateOnScroll } from "./helpers/utils"
 
 
 

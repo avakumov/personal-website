@@ -1,15 +1,16 @@
-import { api } from "./services/api"
-import { createContext } from "./hotkeys"
+import { api } from "../services/api"
+import { createContext } from "../helpers/hotkeys"
+import { showSlides } from "./slide"
+import { CURRENT_TAG_ID, NOTES_ID, SLIDES_ID } from '../globals'
 
-//classes
-const CURRENT_TAG_ID = "admin-current-tag"
-const NOTES_ID = "admin-notes"
+
 
 //TODO relocate state
 const state = {
   tags: [],
   currentTag: "",
   showSlides: false,
+  intervals: []
 }
 
 function init() {
@@ -45,67 +46,34 @@ function init() {
   renderTags()
 }
 
-//show slides, data is [{main, optional, date}]
-//property is {interval:boolean, interval:seconds}
-//TODO realize infinite
-function showSlides(data, { infinite, interval } = { infinite: false, interval: 3 }) {
-  const rootSlides = document.getElementById("container-slide")
 
-  const slide = document.createElement("div")
-  slide.classList.add("slide")
-  rootSlides.appendChild(slide)
-
-  const slideContainer = document.createElement("div")
-  slideContainer.classList.add("slide__container")
-  slide.prepend(slideContainer)
-
-  const slideDate = document.createElement("div")
-  slideDate.classList.add("slide__date")
-  slideContainer.prepend(slideDate)
-
-  const slideMain = document.createElement("div")
-  slideMain.classList.add("slide__main")
-  slideContainer.prepend(slideMain)
-
-  const slideOptional = document.createElement("div")
-  slideOptional.classList.add("slide__optional")
-  slideContainer.prepend(slideOptional)
-
-  //create iterator for leaf slides
-  function* getIteratorData() {yield* data}
-  const iteratorSlide = getIteratorData()
-
-  const changeSlidesInterval = setInterval(() => {
-    const item = iteratorSlide.next()
-    if (item.done) {
-      return clearInterval(changeSlidesInterval)
-    }
-    //TODO add other datas on slide
-    //TODO realize first slide immediately
-    slideDate.innerText = item.value.date.slice(0, 10)
-    slideOptional.innerText = item.value.optional
-    slideMain.innerText = item.value.main
-  }, interval * 1000)
-  return changeSlidesInterval
-}
 
 //TODO add mange slides arrow keys and edit on current, also pause
 function showSlidesCurrentNotes() {
   //if slides shows close them
   if (state.showSlides) {
-    //TODO clear interval changeSlidesInterval
     state.showSlides = false
-    document.getElementById("container-slides").innerHTML = ""
+
+    //stop and remove interval slide from global intervals
+    const index = state.intervals.findIndex(item => item.name === "slide")
+    if (index > -1) {
+      clearInterval(state.intervals[index].value)
+      state.intervals.splice(index)
+    }
+    
+
+    document.getElementById(SLIDES_ID).innerHTML = ""
     return
   }
+
   api.getNotes({ tagId: state.currentTag._id }).then((notes) => {
     const notesMappedToSlide = notes.map((note) => ({
       main: note.name,
       optional: note.tag.name,
       date: note.created_at,
     }))
-    //TODO relocate show slides to separate components which will store interval
     const interval = showSlides(notesMappedToSlide)
+    state.intervals.push({name: "slide", value: interval})
     state.showSlides = true
   })
 }

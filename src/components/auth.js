@@ -1,4 +1,4 @@
-import {postData} from './utils'
+import {postData} from '../helpers/utils'
 
 function init() {
   const el = document.getElementById("auth-btn");
