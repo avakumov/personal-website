@@ -14,9 +14,12 @@ const getTags= () => {
 
 const getNotes= (filter={}) => {
   let endURL = ''
-  const {tagId} = filter
+  const {tagId, _id} = filter
   if (tagId) {
     endURL = `byTag/${tagId}`
+  } 
+  if (_id) {
+    endURL=`${_id}`
   }
   return fetch(`http://localhost:3001/api/note/${endURL}`)
 .then(response => response.json())

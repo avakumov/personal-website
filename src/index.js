@@ -16,6 +16,6 @@ if (path === "adm") {
   home.init()
 }
 
-window.addEventListener("scroll", () => animateOnScroll(100))
+window.addEventListener("scroll", () => animateOnScroll(50))
 
 

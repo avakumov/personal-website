@@ -14,7 +14,7 @@
   color: $textColor;
   font-size: 15px;
   letter-spacing: 0.5px;
-  font-weight: 700;
+  font-weight: 600;
 }
 
 %input-shared {
@@ -66,7 +66,7 @@
   //animation on scroll
   transform: translate(0px, 0px);
   opacity: 1;
-  transition: all 0.4s;
+  transition: all 0.3s;
   &._down-hidden {
     transform: translate(0px, 50px) rotate(5deg);
     transform-origin: top left;
@@ -140,7 +140,7 @@
 
 .slide__main {
   position: absolute;
-  font-size: 50px;
+  font-size: 30px;
   padding: 30px;
   top: 50%;
   left: 50%;

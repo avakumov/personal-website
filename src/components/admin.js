@@ -3,12 +3,15 @@ import { createContext } from "../helpers/hotkeys"
 import { showSlides } from "./slide"
 import { CURRENT_TAG_ID, NOTES_ID, SLIDES_ID, CLI_ID, TAGS_ID } from "../globals"
 
+
 //TODO relocate state
 const state = {
   tags: [],
   currentTag: "",
   showSlides: false,
   intervals: [],
+  editingNote: null,
+  countNumberNoteRender: 0
 }
 
 function init() {
@@ -85,7 +88,7 @@ function renderErrorTag(err) {
 }
 
 function renderNote(note, index) {
-  console.log(index)
+  state.countNumberNoteRender++
   const noteDiv = document.createElement("div")
   noteDiv.classList.add("admin-notes__item")
   noteDiv.classList.add("_anim_item")
@@ -110,6 +113,7 @@ function renderNote(note, index) {
   noteDiv.append(noteNumberDiv)
   noteDiv.append(noteNameDiv)
   document.getElementById(NOTES_ID).prepend(noteDiv)
+ 
 }
 
 function renderErrorNote(err) {
@@ -125,6 +129,9 @@ function renderErrorNote(err) {
 function onAddNote(e) {
   if (e.key === "Enter") {
     e.preventDefault()
+    if (state.editingNote) {
+      //TODO edit note
+    }
     const noteText = document.getElementById("admin-textarea-new-note").value
     const tagId = state.currentTag._id
     if (tagId && noteText) {
@@ -132,9 +139,9 @@ function onAddNote(e) {
       api
         .postNote(newNote)
         .then((res) => {
-          if (res.success) {
+          if (res.success) { //другие также обрабатывать
             //render new note then go back from api
-            renderNote(res.data)//TODO index insert
+            renderNote(res.data, state.countNumberNoteRender)
             document.getElementById("admin-textarea-new-note").value = ""
           }
         })
@@ -207,6 +214,8 @@ function renderNotes(filter) {
   api
     .getNotes(filter)
     .then((notes) => {
+      //reset numbers notes
+      state.countNumberNoteRender = 0
       notes.forEach((note, index) => {
         renderNote(note, index)
       })
@@ -249,7 +258,7 @@ function renderCLI() {
   inputCLI.addEventListener("keypress", onKeyPressInputCLI)
 }
 
-//TODO add edit and delete note by number (realize number note before) (!23 edit or !22 del)
+//TODO add edit and  note by number 
 //hadler keypress cli
 function onKeyPressInputCLI(e) {
   if (e.key !== "Enter") {
@@ -260,8 +269,11 @@ function onKeyPressInputCLI(e) {
   if (name === "tag") {
     tagCommand(value)
   }
-  if (name === "del") {
+  else if (name === "del") {
     delCommand(value)
+  }
+  else if (name === "edit") {
+    editCommand(value)
   }
   function tagCommand(value) {
     if (!value) {
@@ -293,6 +305,29 @@ function onKeyPressInputCLI(e) {
          api.deletePost(id)
          .then(res => console.log(res))
          .catch(err => console.log(err))
+      }
+     
+    }
+  }
+
+  function editCommand(value) {
+    const number = Number.parseInt(value)
+    if (number) {
+      const el = document.querySelector(`[number="${value}"]`)
+      const id = el.getAttribute("id")
+
+      if (id) {
+        api.getNotes({_id: id})
+        .then(res => {
+          const [ note ] = res
+          if (note) {
+            state.editingNote = note
+            document.getElementById("admin-textarea-new-note").value = note.name
+            document.getElementById(CURRENT_TAG_ID).value = note.tag.name
+            //realize put note
+          }
+        })
+        .catch(err => console.log(err))
       }
      
     }

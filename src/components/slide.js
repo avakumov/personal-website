@@ -8,18 +8,21 @@ function showSlides(data, { isInfinite, interval } = { isInfinite: true, interva
   let currentIndex = 0
 
   function onKeyKeyDownSlide(e) {
-    e.preventDefault()
+    
 
     if (e.key === " ") {
+      e.preventDefault()
       isPause = !isPause
     }
 
     if (e.key === "ArrowLeft") {
+      e.preventDefault()
       if (currentIndex === 0) return
       currentIndex--
       renderSlide(data[currentIndex])
     }
     if (e.key === "ArrowRight") {
+      e.preventDefault()
       currentIndex++
       //back to first slide
       if (isInfinite && !data[currentIndex]) {
@@ -67,8 +70,8 @@ function showSlides(data, { isInfinite, interval } = { isInfinite: true, interva
   renderSlide(data[currentIndex])
 
   const slideInterval = setInterval(() => {
-    currentIndex++
     if (isPause) return
+    currentIndex++
 
     //back to first slide
     if (isInfinite && !data[currentIndex]) {
