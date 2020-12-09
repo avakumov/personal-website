@@ -1,17 +1,15 @@
 import { api } from "../services/api"
 import { createContext } from "../helpers/hotkeys"
-import { showSlides } from "./slide"
+import { ShowSlides, showSlides } from "./slide"
 import { CURRENT_TAG_ID, NOTES_ID, SLIDES_ID, CLI_ID, TAGS_ID } from "../globals"
-
 
 //TODO relocate state
 const state = {
   tags: [],
   currentTag: "",
-  showSlides: false,
-  intervals: [],
+  showSlides: null,
   editingNote: null,
-  countNumberNoteRender: 0
+  countNumberNoteRender: 0,
 }
 
 function init() {
@@ -50,28 +48,18 @@ function init() {
 function showSlidesCurrentNotes() {
   //if slides shows close them
   if (state.showSlides) {
-    state.showSlides = false
-
-    //stop and remove interval slide from global intervals
-    const index = state.intervals.findIndex((item) => item.name === "slide")
-    if (index > -1) {
-      clearInterval(state.intervals[index].value)
-      state.intervals.splice(index, 1)
-    }
-
-    document.getElementById(SLIDES_ID).innerHTML = ""
+    state.showSlides.stop()
+    state.showSlides = null
     return
   }
-
   api.getNotes({ tagId: state.currentTag._id }).then((notes) => {
     const notesMappedToSlide = notes.map((note) => ({
       main: note.name,
       optional: note.tag.name,
       date: note.created_at,
     }))
-    const interval = showSlides(notesMappedToSlide)
-    state.intervals.push({ name: "slide", value: interval })
-    state.showSlides = true
+    state.showSlides = new ShowSlides(SLIDES_ID, notesMappedToSlide)
+    state.showSlides.start()
   })
 }
 
@@ -113,7 +101,6 @@ function renderNote(note, index) {
   noteDiv.append(noteNumberDiv)
   noteDiv.append(noteNameDiv)
   document.getElementById(NOTES_ID).prepend(noteDiv)
- 
 }
 
 function renderErrorNote(err) {
@@ -139,7 +126,8 @@ function onAddNote(e) {
       api
         .postNote(newNote)
         .then((res) => {
-          if (res.success) { //другие также обрабатывать
+          if (res.success) {
+            //другие также обрабатывать
             //render new note then go back from api
             renderNote(res.data, state.countNumberNoteRender)
             document.getElementById("admin-textarea-new-note").value = ""
@@ -258,7 +246,7 @@ function renderCLI() {
   inputCLI.addEventListener("keypress", onKeyPressInputCLI)
 }
 
-//TODO add edit and  note by number 
+//TODO add edit and  note by number
 //hadler keypress cli
 function onKeyPressInputCLI(e) {
   if (e.key !== "Enter") {
@@ -268,11 +256,9 @@ function onKeyPressInputCLI(e) {
   const [name, value] = command.split(" ")
   if (name === "tag") {
     tagCommand(value)
-  }
-  else if (name === "del") {
+  } else if (name === "del") {
     delCommand(value)
-  }
-  else if (name === "edit") {
+  } else if (name === "edit") {
     editCommand(value)
   }
   function tagCommand(value) {
@@ -298,15 +284,19 @@ function onKeyPressInputCLI(e) {
 
   function delCommand(value) {
     const number = Number.parseInt(value)
-    if (number) {
+    if (number >= 0) {
       const el = document.querySelector(`[number="${value}"]`)
       const id = el.getAttribute("id")
       if (id) {
-         api.deletePost(id)
-         .then(res => console.log(res))
-         .catch(err => console.log(err))
+        api
+          .deletePost(id)
+          .then((res) => {
+            console.log(res)
+            //remove note from DOM
+            el.parentNode.removeChild(el)
+          })
+          .catch((err) => console.log(err))
       }
-     
     }
   }
 
@@ -317,19 +307,19 @@ function onKeyPressInputCLI(e) {
       const id = el.getAttribute("id")
 
       if (id) {
-        api.getNotes({_id: id})
-        .then(res => {
-          const [ note ] = res
-          if (note) {
-            state.editingNote = note
-            document.getElementById("admin-textarea-new-note").value = note.name
-            document.getElementById(CURRENT_TAG_ID).value = note.tag.name
-            //realize put note
-          }
-        })
-        .catch(err => console.log(err))
+        api
+          .getNotes({ _id: id })
+          .then((res) => {
+            const [note] = res
+            if (note) {
+              state.editingNote = note
+              document.getElementById("admin-textarea-new-note").value = note.name
+              document.getElementById(CURRENT_TAG_ID).value = note.tag.name
+              //realize put note
+            }
+          })
+          .catch((err) => console.log(err))
       }
-     
     }
   }
 }

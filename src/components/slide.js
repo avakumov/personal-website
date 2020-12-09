@@ -1,90 +1,109 @@
-import { SLIDES_ID } from "../globals"
-
 //show slides, data is [{main, optional, date}]
 //property is {interval:boolean, interval:seconds}
 //space - pause, arrow left - previous slide, arrow rirht - next slide
-function showSlides(data, { isInfinite, interval } = { isInfinite: true, interval: 3 }) {
-  let isPause = false
-  let currentIndex = 0
+class ShowSlides {
+  constructor(parentId, data, { isInfinite, interval } = { isInfinite: true, interval: 3 }) {
+    this.data = data
+    this.isInfinite = isInfinite
+    this.interval = interval
+    this.isPause = false
+    this.currentIndex = 0
+    this.parentId = parentId
+    this._bindKeyDownListener = this._onKeyKeyDownSlide.bind(this)
+  }
 
-  function onKeyKeyDownSlide(e) {
-    
-
+  _onKeyKeyDownSlide(e) {
     if (e.key === " ") {
       e.preventDefault()
-      isPause = !isPause
+      this.isPause = !this.isPause
+      return
     }
 
     if (e.key === "ArrowLeft") {
       e.preventDefault()
-      if (currentIndex === 0) return
-      currentIndex--
-      renderSlide(data[currentIndex])
+      if (this.currentIndex === 0) return
+      this.currentIndex--
+      return this._render(this.data[this.currentIndex])
     }
     if (e.key === "ArrowRight") {
       e.preventDefault()
-      currentIndex++
+      this.currentIndex++
       //back to first slide
-      if (isInfinite && !data[currentIndex]) {
-        currentIndex = 0
+      if (this.isInfinite && !this.data[this.currentIndex]) {
+        this.currentIndex = 0
       }
-      renderSlide(data[currentIndex])
+      return this._render(this.data[this.currentIndex])
     }
   }
 
-  document.addEventListener("keydown", (e) => onKeyKeyDownSlide(e))
+  _mount() {
+    const rootSlides = document.getElementById(this.parentId)
 
-  const rootSlides = document.getElementById(SLIDES_ID)
+    const slide = document.createElement("div")
+    slide.classList.add("slide")
+    rootSlides.appendChild(slide)
 
-  const slide = document.createElement("div")
-  slide.classList.add("slide")
-  rootSlides.appendChild(slide)
+    const slideContainer = document.createElement("div")
+    slideContainer.classList.add("slide__container")
+    slide.prepend(slideContainer)
 
-  const slideContainer = document.createElement("div")
-  slideContainer.classList.add("slide__container")
-  slide.prepend(slideContainer)
+    this.slideDate = document.createElement("div")
+    this.slideDate.classList.add("slide__date")
+    slideContainer.prepend(this.slideDate)
 
-  const slideDate = document.createElement("div")
-  slideDate.classList.add("slide__date")
-  slideContainer.prepend(slideDate)
+    this.slideMain = document.createElement("div")
+    this.slideMain.classList.add("slide__main")
+    slideContainer.prepend(this.slideMain)
 
-  const slideMain = document.createElement("div")
-  slideMain.classList.add("slide__main")
-  slideContainer.prepend(slideMain)
-
-  const slideOptional = document.createElement("div")
-  slideOptional.classList.add("slide__optional")
-  slideContainer.prepend(slideOptional)
-
-  const renderSlide = ({ main, date, optional }) => {
-    console.log("render index:", currentIndex)
-    slideDate.innerText = date ? date.slice(0, 10) : "No date"
-    slideOptional.innerText = optional ? optional : ""
-    slideMain.innerText = main ? main : "No text"
+    this.slideOptional = document.createElement("div")
+    this.slideOptional.classList.add("slide__optional")
+    slideContainer.prepend(this.slideOptional)
   }
-  //if data empty
-  if (data.length === 0) {
-    renderSlide({ main: "No slides" })
-    return
+
+  _unmount() {
+    const rootSlides = document.getElementById(this.parentId)
+    rootSlides.innerHTML = ""
   }
-  renderSlide(data[currentIndex])
 
-  const slideInterval = setInterval(() => {
-    if (isPause) return
-    currentIndex++
+  _render({ main, date, optional }) {
+    console.log("render index:", this.currentIndex)
+    this.slideDate.innerText = date ? date.slice(0, 10) : "No date"
+    this.slideOptional.innerText = optional ? optional : ""
+    this.slideMain.innerText = main ? main : "No text"
+  }
 
-    //back to first slide
-    if (isInfinite && !data[currentIndex]) {
-      currentIndex = 0
-    }
-
-    if (!data[currentIndex]) {
-      clearInterval(slideInterval)
+  start() {
+    this._mount()
+    if (this.data.length === 0) {
+      this._render({ main: "No slides" })
       return
     }
-    renderSlide(data[currentIndex])
-  }, interval * 1000)
-  return slideInterval
+    this._render(this.data[this.currentIndex])
+    document.addEventListener("keydown", this._bindKeyDownListener)
+    this.slideInterval = setInterval(this._changeSlide.bind(this), this.interval * 1000)
+  }
+
+  stop() {
+    document.removeEventListener("keydown", this._bindKeyDownListener)
+    clearInterval(this.slideInterval)
+    this._unmount()
+  }
+
+  _changeSlide() {
+    if (this.isPause) return
+    this.currentIndex++
+
+    //back to first slide
+    if (this.isInfinite && !this.data[this.currentIndex]) {
+      this.currentIndex = 0
+    }
+
+    if (!this.data[this.currentIndex]) {
+      return
+    }
+
+    this._render(this.data[this.currentIndex])
+  }
 }
 
-export { showSlides }
+export { ShowSlides }
