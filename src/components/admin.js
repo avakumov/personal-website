@@ -1,6 +1,6 @@
 import { api } from "../services/api"
 import { createContext } from "../helpers/hotkeys"
-import { ShowSlides, showSlides } from "./slide"
+import { ShowSlides } from "./slide"
 import { CURRENT_TAG_ID, NOTES_ID, SLIDES_ID, CLI_ID, TAGS_ID } from "../globals"
 
 //TODO relocate state
@@ -29,8 +29,8 @@ function init() {
   })
 
   //add event listener for add note
-  const textareNewNote = document.getElementById("admin-textarea-new-note")
-  textareNewNote.addEventListener("keypress", (e) => onAddNote(e))
+  const textareaNewNote = document.getElementById("admin-textarea-new-note")
+  textareaNewNote.addEventListener("keypress", (e) => onAddNote(e))
 
   const inputNewTag = document.getElementById(CURRENT_TAG_ID)
 
@@ -50,6 +50,10 @@ function showSlidesCurrentNotes() {
   if (state.showSlides) {
     state.showSlides.stop()
     state.showSlides = null
+    return
+  }
+  if (!state.currentTag) {
+    console.log("ERROR")
     return
   }
   api.getNotes({ tagId: state.currentTag._id }).then((notes) => {
@@ -115,11 +119,14 @@ function renderErrorNote(err) {
 //add note by pressing Enter
 function onAddNote(e) {
   if (e.key === "Enter") {
+    const noteTextarea = document.getElementById("admin-textarea-new-note")
+    noteTextarea.classList.remove("blink-error")
     e.preventDefault()
     if (state.editingNote) {
       //TODO edit note
     }
-    const noteText = document.getElementById("admin-textarea-new-note").value
+
+    const noteText = noteTextarea.value
     const tagId = state.currentTag._id
     if (tagId && noteText) {
       const newNote = { tag: tagId, name: noteText }
@@ -131,6 +138,12 @@ function onAddNote(e) {
             //render new note then go back from api
             renderNote(res.data, state.countNumberNoteRender)
             document.getElementById("admin-textarea-new-note").value = ""
+            // TODO blink new note  if note saved
+            
+          } else {
+            // blink border error input if note not saved
+            noteTextarea.classList.add("blink-error")
+            
           }
         })
         .catch((err) => {
@@ -186,8 +199,10 @@ function onChangeInputTag() {
 
   //rerender notes by filter tag
   if (tag) {
-    rerenderNotes({ tagId: tag._id })
+    return rerenderNotes({ tagId: tag._id })
   }
+  //nothing
+  //TODO render nothing
 }
 
 function getTagByName(name) {

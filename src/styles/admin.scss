@@ -54,7 +54,11 @@
 
 .admin-form__textarea {
   @extend %input-shared;
+  &.blink-error {
+    animation: blinkBorder-error 0.5s linear;
+  }
 }
+
 .admin-notes__item {
   @extend %text-shared;
   display: flex;
