@@ -59,10 +59,21 @@
   }
 }
 
+@keyframes blinkAddNote {
+  50% {
+    background-color: $green-3;
+  }
+}
+
 .admin-notes__item {
   @extend %text-shared;
   display: flex;
-  padding-bottom: 10px;
+  padding: 5px 10px 5px 10px;
+
+  &.blink-add-note {
+    animation: blinkAddNote 0.5s linear;
+  }
+
   &.error {
     color: $TextError;
   }
@@ -92,7 +103,6 @@
 
 .admin-notes__item-name {
   width: 537px;
-  
 }
 
 .admin-notes__item-number {

@@ -79,7 +79,7 @@ function renderErrorTag(err) {
   inputTagList.classList.add("error")
 }
 
-function renderNote(note, index) {
+function renderNote(note, index, isNew = false) {
   state.countNumberNoteRender++
   const noteDiv = document.createElement("div")
   noteDiv.classList.add("admin-notes__item")
@@ -104,6 +104,10 @@ function renderNote(note, index) {
   noteDiv.append(noteTagDiv)
   noteDiv.append(noteNumberDiv)
   noteDiv.append(noteNameDiv)
+  if (isNew) {
+    noteDiv.classList.add("blink-add-note")
+  } //blink new note
+
   document.getElementById(NOTES_ID).prepend(noteDiv)
 }
 
@@ -136,14 +140,11 @@ function onAddNote(e) {
           if (res.success) {
             //другие также обрабатывать
             //render new note then go back from api
-            renderNote(res.data, state.countNumberNoteRender)
+            renderNote(res.data, state.countNumberNoteRender, true)
             document.getElementById("admin-textarea-new-note").value = ""
-            // TODO blink new note  if note saved
-            
           } else {
             // blink border error input if note not saved
             noteTextarea.classList.add("blink-error")
-            
           }
         })
         .catch((err) => {
