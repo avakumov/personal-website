@@ -19,6 +19,18 @@ const deleteData = (url = "") => {
   })
 }
 
+const putData = async (url = "", data = {}) => {
+  const res = await fetch(url, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      // 'Content-Type': 'application/x-www-form-urlencoded',
+    },
+    body: JSON.stringify(data),
+  })
+  return res
+}
+
 function animateOnScroll(deltaY) {
   const animItems = document.querySelectorAll("._anim_item")
   animItems.forEach((el, index) => {
@@ -45,4 +57,4 @@ function animateOnScroll(deltaY) {
   })
 }
 
-export { postData, deleteData, animateOnScroll }
+export { postData, deleteData, animateOnScroll, putData }

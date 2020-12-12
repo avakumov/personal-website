@@ -1,4 +1,4 @@
-import { postData, deleteData } from "../helpers/utils"
+import { postData, deleteData, putData } from "../helpers/utils"
 
 const URL = "http://localhost:3001/api"
 
@@ -42,6 +42,15 @@ const postNote = (note) => {
   return postData(`${URL}/note`, note).then((data) => data.json())
 }
 
+const putNote= (note) => {
+  const id = note._id
+  if (id) {
+    delete note._id
+  }
+  return putData(`${URL}/note/${id}`, note)
+    .then((response) => response.json())
+}
+
 export const api = {
   getPosts,
   getTags,
@@ -49,4 +58,5 @@ export const api = {
   postTag,
   postNote,
   deletePost,
+  putNote
 }

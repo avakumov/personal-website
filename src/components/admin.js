@@ -80,35 +80,43 @@ function renderErrorTag(err) {
 }
 
 function renderNote(note, index, isNew = false) {
-  state.countNumberNoteRender++
-  const noteDiv = document.createElement("div")
-  noteDiv.classList.add("admin-notes__item")
-  noteDiv.classList.add("_anim_item")
+  //Проверять есть ли такая запись, если есть то вставлять вместо старой
+  let noteDiv = document.getElementById(note._id)
+  const innerTextOfElements = [note.tag.name, index, note.name]
 
-  //for refer edit, delete
-  noteDiv.setAttribute("id", note._id)
-  noteDiv.setAttribute("number", index)
+  if (noteDiv) {
+    const oldIndex = noteDiv.getAttribute("number")
+    innerTextOfElements[1] = oldIndex
+  } else {
+    state.countNumberNoteRender++
+    noteDiv = document.createElement("div")
+    noteDiv.classList.add("admin-notes__item")
+    noteDiv.classList.add("_anim_item")
+    //for refer edit, delete
+    noteDiv.setAttribute("id", note._id)
+    noteDiv.setAttribute("number", index)
+    const noteTagDiv = document.createElement("div")
+    noteTagDiv.classList.add("admin-notes__item-tag")
 
-  const noteTagDiv = document.createElement("div")
-  noteTagDiv.classList.add("admin-notes__item-tag")
-  noteTagDiv.innerText = note.tag.name
+    const noteNumberDiv = document.createElement("div")
+    noteNumberDiv.classList.add("admin-notes__item-number")
 
-  const noteNumberDiv = document.createElement("div")
-  noteNumberDiv.classList.add("admin-notes__item-number")
-  noteNumberDiv.innerText = index
+    const noteNameDiv = document.createElement("div")
+    noteNameDiv.classList.add("admin-notes__item-name")
 
-  const noteNameDiv = document.createElement("div")
-  noteNameDiv.classList.add("admin-notes__item-name")
-  noteNameDiv.innerText = note.name
+    noteDiv.append(noteTagDiv)
+    noteDiv.append(noteNumberDiv)
+    noteDiv.append(noteNameDiv)
+    document.getElementById(NOTES_ID).prepend(noteDiv)
+  }
 
-  noteDiv.append(noteTagDiv)
-  noteDiv.append(noteNumberDiv)
-  noteDiv.append(noteNameDiv)
+  for (let i = 0; i < noteDiv.children.length; i++) {
+    noteDiv.children[i].innerText = innerTextOfElements[i]
+  }
+
   if (isNew) {
     noteDiv.classList.add("blink-add-note")
   } //blink new note
-
-  document.getElementById(NOTES_ID).prepend(noteDiv)
 }
 
 function renderErrorNote(err) {
@@ -124,14 +132,30 @@ function renderErrorNote(err) {
 function onAddNote(e) {
   if (e.key === "Enter") {
     const noteTextarea = document.getElementById("admin-textarea-new-note")
+    const noteText = noteTextarea.value
+    const tagId = state.currentTag._id
+
     noteTextarea.classList.remove("blink-error")
     e.preventDefault()
     if (state.editingNote) {
-      //TODO edit note
+      state.editingNote.name = noteText
+      state.editingNote.tag = tagId
+      api
+        .putNote(state.editingNote)
+        .then((res) => {
+          if (res.success) {
+            renderNote(res.data, state.countNumberNoteRender, true)
+            noteTextarea.value = ""
+            state.editingNote = null
+          }
+        })
+        .catch((err) => {
+          console.log(err)
+        })
+
+      return
     }
 
-    const noteText = noteTextarea.value
-    const tagId = state.currentTag._id
     if (tagId && noteText) {
       const newNote = { tag: tagId, name: noteText }
       api
@@ -141,7 +165,7 @@ function onAddNote(e) {
             //другие также обрабатывать
             //render new note then go back from api
             renderNote(res.data, state.countNumberNoteRender, true)
-            document.getElementById("admin-textarea-new-note").value = ""
+            noteTextarea.value = ""
           } else {
             // blink border error input if note not saved
             noteTextarea.classList.add("blink-error")
@@ -224,7 +248,9 @@ function renderNotes(filter) {
         renderNote(note, index)
       })
     })
-    .catch((err) => renderErrorNote(err))
+    .catch((err) => {
+      renderErrorNote(err)
+    })
 }
 
 //get tags and render them in input list or render error
@@ -329,6 +355,7 @@ function onKeyPressInputCLI(e) {
             const [note] = res
             if (note) {
               state.editingNote = note
+              state.currentTag = note.tag
               document.getElementById("admin-textarea-new-note").value = note.name
               document.getElementById(CURRENT_TAG_ID).value = note.tag.name
               //realize put note
