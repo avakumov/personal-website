@@ -25,7 +25,6 @@ const getNotes = (filter = {}) => {
   }
   return fetch(`${URL}/note/${endURL}`)
     .then((response) => response.json())
-    .then((data) => data.data)
 }
 
 const deletePost = (id) => {

@@ -128,6 +128,14 @@ function renderErrorNote(err) {
   document.getElementById(NOTES_ID).appendChild(noteDiv)
 }
 
+function renderNothingNotes(msg) {
+  const noteDiv = document.createElement("div")
+  noteDiv.classList.add("admin-notes__item")
+  noteDiv.classList.add("_anim_item")
+  noteDiv.innerText = msg
+  document.getElementById(NOTES_ID).appendChild(noteDiv)
+}
+
 //add note by pressing Enter
 function onAddNote(e) {
   if (e.key === "Enter") {
@@ -162,7 +170,6 @@ function onAddNote(e) {
         .postNote(newNote)
         .then((res) => {
           if (res.success) {
-            //другие также обрабатывать
             //render new note then go back from api
             renderNote(res.data, state.countNumberNoteRender, true)
             noteTextarea.value = ""
@@ -226,8 +233,7 @@ function onChangeInputTag() {
   if (tag) {
     return rerenderNotes({ tagId: tag._id })
   }
-  //nothing
-  //TODO render nothing
+  rerenderNotes({ tagId: "nothing" })
 }
 
 function getTagByName(name) {
@@ -237,16 +243,20 @@ function getTagByName(name) {
 
 //filter object {tagId: value}
 //get notes and render them or render error
-//TODO add number notes for refer by number to note for edit (!23 edit or !22 del)
 function renderNotes(filter) {
   api
     .getNotes(filter)
-    .then((notes) => {
+    .then((res) => {
       //reset numbers notes
-      state.countNumberNoteRender = 0
-      notes.forEach((note, index) => {
-        renderNote(note, index)
-      })
+      if (res.success) {
+        if (res.data.length === 0) return renderNothingNotes("Записей пока нет")
+        state.countNumberNoteRender = 0
+        res.data.forEach((note, index) => {
+          renderNote(note, index)
+        })
+      } else {
+        renderNothingNotes("Такого тега нет")
+      }
     })
     .catch((err) => {
       renderErrorNote(err)
@@ -267,7 +277,7 @@ function renderTags() {
 }
 
 function rerenderNotes(filter) {
-  document.getElementById(NOTES_ID).innerText = ""
+  document.getElementById(NOTES_ID).innerHTML = ""
   renderNotes(filter)
 }
 
@@ -288,7 +298,6 @@ function renderCLI() {
   inputCLI.addEventListener("keypress", onKeyPressInputCLI)
 }
 
-//TODO add edit and  note by number
 //hadler keypress cli
 function onKeyPressInputCLI(e) {
   if (e.key !== "Enter") {
