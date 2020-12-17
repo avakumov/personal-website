@@ -1,6 +1,10 @@
 import { postData, deleteData, putData } from "../helpers/utils"
 
-const URL = "http://localhost:3001/api"
+let host = "localhost"
+if (process.env.NODE_ENV === 'production') {
+  host = "avamir.ru"
+}
+const URL = `http://${host}:3001/api`
 
 const getPosts = (page) => {
   return fetch(`${URL}/post/${page}`)

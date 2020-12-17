@@ -55,7 +55,7 @@ function showPosts() {
   const content = document.getElementById(CONTENT_ID)
   content.innerHTML = ''
   const newDiv = document.createElement("div")
-  newDiv.innerText = 'hello'
+  newDiv.innerText = 'hellos'
   content.appendChild(newDiv)
 
 }

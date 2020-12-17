@@ -44,7 +44,7 @@ module.exports = {
         test: /\.(png|svg|jpg|gif)$/,
         loader: "file-loader",
         options: {
-          name: "/images/[name].[ext]",
+          name: "./images/[name].[ext]",
           esModule: false,
         },
       },
@@ -52,7 +52,7 @@ module.exports = {
         test: /\.(woff|woff2)$/,
         loader: "file-loader",
         options: {
-          name: "/fonts/[name].[ext]",
+          name: "./fonts/[name].[ext]",
         },
       },
     ],
