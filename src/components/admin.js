@@ -1,7 +1,7 @@
 import { api } from "../services/api"
 import { createContext } from "../helpers/hotkeys"
 import { ShowSlides } from "./slide"
-import { CURRENT_TAG_ID, NOTES_ID, SLIDES_ID, CLI_ID, TAGS_ID } from "../globals"
+import { CURRENT_TAG_ID, NOTES_ID, SLIDES_ID, CLI_ID, TAGS_ID, CONTENT_ID } from "../globals"
 
 //TODO relocate state
 const state = {
@@ -28,6 +28,12 @@ function init() {
     showSlidesCurrentNotes()
   })
 
+  //show posts by hotkey
+  hotKeyContext.register("ctrl+p", (e) => {
+    e.preventDefault()
+    showPosts()
+  })
+
   //add event listener for add note
   const textareaNewNote = document.getElementById("admin-textarea-new-note")
   textareaNewNote.addEventListener("keypress", (e) => onAddNote(e))
@@ -45,6 +51,15 @@ function init() {
   renderTags()
 }
 
+function showPosts() {
+  const content = document.getElementById(CONTENT_ID)
+  content.innerHTML = ''
+  const newDiv = document.createElement("div")
+  newDiv.innerText = 'hello'
+  content.appendChild(newDiv)
+
+}
+
 function showSlidesCurrentNotes() {
   //if slides shows close them
   if (state.showSlides) {
@@ -52,18 +67,20 @@ function showSlidesCurrentNotes() {
     state.showSlides = null
     return
   }
-  if (!state.currentTag) {
-    console.log("ERROR")
-    return
+  let filter = {}
+  if (state.currentTag) {
+    filter = { tagId: state.currentTag._id }
   }
-  api.getNotes({ tagId: state.currentTag._id }).then((notes) => {
-    const notesMappedToSlide = notes.map((note) => ({
-      main: note.name,
-      optional: note.tag.name,
-      date: note.created_at,
-    }))
-    state.showSlides = new ShowSlides(SLIDES_ID, notesMappedToSlide)
-    state.showSlides.start()
+  api.getNotes(filter).then((res) => {
+    if (res.success) {
+      const notesMappedToSlide = res.data.map((note) => ({
+        main: note.name,
+        optional: note.tag.name,
+        date: note.created_at,
+      }))
+      state.showSlides = new ShowSlides(SLIDES_ID, notesMappedToSlide)
+      state.showSlides.start()
+    }
   })
 }
 
@@ -259,7 +276,7 @@ function renderNotes(filter) {
       }
     })
     .catch((err) => {
-      renderErrorNote(err)
+      renderErrorNote("Нет связи с сервером")
     })
 }
 
@@ -273,7 +290,7 @@ function renderTags() {
         renderTag(tag)
       })
     })
-    .catch((err) => renderErrorTag(err))
+    .catch((err) => renderErrorTag("Нет связи с сервером"))
 }
 
 function rerenderNotes(filter) {

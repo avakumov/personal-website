@@ -8,24 +8,22 @@
     <title>Admin <%= SITE_TITLE %></title>
   </head>
   <body>
-    <div id=<%= SLIDES_ID %>>
+    <div id="<%=SLIDES_ID%>">
       <!-- render slides -->
     </div>
-      <div class="page">
-        <div id=<%= CLI_ID %>> 
-          <!-- cli render by js -->
-        </div>
+
+    <div class="page">
+      <div id="<%=CLI_ID%>">
+        <!-- cli render by js -->
+      </div>
+      <!-- content render by js -->
+      <div id="<%=CONTENT_ID%>">
         <div class="admin-form">
           <div class="admin-form__container-input-list">
-            <input
-              list=<%= TAGS_ID %>
-              width="10"
-              class="admin-form__input-list"
-              id=<%= CURRENT_TAG_ID %>
-              
-            />
-            <datalist id=<%= TAGS_ID %>>
-                <!-- insert options by javascript. Data must recived from server -->
+            <input list="<%=TAGS_ID%>"
+            width="10" class="admin-form__input-list" id="<%=CURRENT_TAG_ID%>"/>
+            <datalist id="<%=TAGS_ID%>">
+              <!-- insert options by javascript. Data must recived from server -->
             </datalist>
           </div>
           <div>
@@ -38,12 +36,13 @@
           </div>
         </div>
 
-        <div class="admin-notes" id=<%= NOTES_ID %>>
+        <div class="admin-notes" id ="<%=NOTES_ID%>">
 
-          <div class="admin-notes__item _anim_item" >
-              <!-- js insert notes from server -->
+          <div class="admin-notes__item _anim_item">
+            <!-- js insert notes from server -->
           </div>
         </div>
       </div>
+    </div>
   </body>
 </html>

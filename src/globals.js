@@ -8,5 +8,6 @@ module.exports = {
     NOTES_ID: "admin-notes",
     SLIDES_ID: "container-slide",
     CLI_ID: "admin-cli",
-    TAGS_ID: "admin-tags-notes"
+    TAGS_ID: "admin-tags-notes",
+    CONTENT_ID: "content"
 }
