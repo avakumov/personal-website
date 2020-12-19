@@ -53,11 +53,10 @@ function init() {
 
 function showPosts() {
   const content = document.getElementById(CONTENT_ID)
-  content.innerHTML = ''
+  content.innerHTML = ""
   const newDiv = document.createElement("div")
-  newDiv.innerText = 'hellos'
+  newDiv.innerText = "hellos"
   content.appendChild(newDiv)
-
 }
 
 function showSlidesCurrentNotes() {
@@ -378,13 +377,14 @@ function onKeyPressInputCLI(e) {
         api
           .getNotes({ _id: id })
           .then((res) => {
-            const [note] = res
-            if (note) {
-              state.editingNote = note
-              state.currentTag = note.tag
-              document.getElementById("admin-textarea-new-note").value = note.name
-              document.getElementById(CURRENT_TAG_ID).value = note.tag.name
-              //realize put note
+            if (res.success) {
+              const [note] = res.data
+              if (note) {
+                state.editingNote = note
+                state.currentTag = note.tag
+                document.getElementById("admin-textarea-new-note").value = note.name
+                document.getElementById(CURRENT_TAG_ID).value = note.tag.name
+              }
             }
           })
           .catch((err) => console.log(err))
