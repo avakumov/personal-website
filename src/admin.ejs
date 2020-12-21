@@ -13,11 +13,8 @@
     </div>
 
     <div class="page">
-      <div id="<%=CLI_ID%>">
-        <!-- cli render by js -->
-      </div>
-      <!-- content render by js -->
-      <div id="<%=CONTENT_ID%>">
+      <div class="header">
+        <div id="<%=CLI_ID%>"><!-- cli render by js --></div>
         <div class="admin-form">
           <div class="admin-form__container-input-list">
             <input list="<%=TAGS_ID%>"
@@ -35,7 +32,10 @@
             ></textarea>
           </div>
         </div>
-
+      </div>
+      
+      <!-- content render by js -->
+      <div id="<%=CONTENT_ID%>" class="content">
         <div class="admin-notes" id ="<%=NOTES_ID%>">
 
           <div class="admin-notes__item _anim_item">

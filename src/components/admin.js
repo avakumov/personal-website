@@ -29,10 +29,11 @@ function init() {
   })
 
   //show posts by hotkey
-  hotKeyContext.register("ctrl+p", (e) => {
-    e.preventDefault()
-    showPosts()
-  })
+  //TODO 1 To restore then refactor content entry point
+  // hotKeyContext.register("ctrl+p", (e) => {
+  //   e.preventDefault()
+  //   showPosts()
+  // })
 
   //add event listener for add note
   const textareaNewNote = document.getElementById("admin-textarea-new-note")
@@ -50,14 +51,14 @@ function init() {
 
   renderTags()
 }
-
-function showPosts() {
-  const content = document.getElementById(CONTENT_ID)
-  content.innerHTML = ""
-  const newDiv = document.createElement("div")
-  newDiv.innerText = "hellos"
-  content.appendChild(newDiv)
-}
+// TODO 2 To restore then refactor content entry point
+// function showPosts() {
+//   const content = document.getElementById(CONTENT_ID)
+//   content.innerHTML = ""
+//   const newDiv = document.createElement("div")
+//   newDiv.innerText = "hellos"
+//   content.appendChild(newDiv)
+// }
 
 function showSlidesCurrentNotes() {
   //if slides shows close them
