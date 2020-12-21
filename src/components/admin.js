@@ -1,7 +1,7 @@
 import { api } from "../services/api"
 import { createContext } from "../helpers/hotkeys"
 import { ShowSlides } from "./slide"
-import { CURRENT_TAG_ID, NOTES_ID, SLIDES_ID, CLI_ID, TAGS_ID, CONTENT_ID } from "../globals"
+import { CURRENT_TAG_ID, SLIDES_ID, CLI_ID, TAGS_ID, CONTENT_ID } from "../globals"
 
 //TODO relocate state
 const state = {
@@ -9,7 +9,7 @@ const state = {
   currentTag: "",
   showSlides: null,
   editingNote: null,
-  countNumberNoteRender: 0,
+  numberEntityRendered: 0,
 }
 
 function init() {
@@ -71,7 +71,7 @@ function showSlidesCurrentNotes() {
   if (state.currentTag) {
     filter = { tagId: state.currentTag._id }
   }
-  api.getNotes(filter).then((res) => {
+  api.getEntities("note").then((res) => {
     if (res.success) {
       const notesMappedToSlide = res.data.map((note) => ({
         main: note.name,
@@ -95,68 +95,68 @@ function renderErrorTag(err) {
   inputTagList.value = err
   inputTagList.classList.add("error")
 }
-
-function renderNote(note, index, isNew = false) {
+//{ _id, name, tag } = entity
+function renderEntity(entity, index, isNew = false) {
   //Проверять есть ли такая запись, если есть то вставлять вместо старой
-  let noteDiv = document.getElementById(note._id)
-  const innerTextOfElements = [note.tag.name, index, note.name]
+  let { _id, name, tag } = entity
+  let entityNode = document.getElementById(_id)
 
-  if (noteDiv) {
-    const oldIndex = noteDiv.getAttribute("number")
-    innerTextOfElements[1] = oldIndex
+  if (entityNode) {
+    const oldIndex = entityNode.getAttribute("number")
+    index = oldIndex
   } else {
-    state.countNumberNoteRender++
-    noteDiv = document.createElement("div")
-    noteDiv.classList.add("admin-notes__item")
-    noteDiv.classList.add("_anim_item")
+    state.numberEntityRendered++
+    entityNode = document.createElement("div")
+    entityNode.classList.add("entities__item")
+    entityNode.classList.add("_anim_item")
     //for refer edit, delete
-    noteDiv.setAttribute("id", note._id)
-    noteDiv.setAttribute("number", index)
-    const noteTagDiv = document.createElement("div")
-    noteTagDiv.classList.add("admin-notes__item-tag")
+    entityNode.setAttribute("id", _id)
+    entityNode.setAttribute("number", index)
 
-    const noteNumberDiv = document.createElement("div")
-    noteNumberDiv.classList.add("admin-notes__item-number")
+    const tagNode = document.createElement("div")
+    tagNode.classList.add("entities__item-tag")
+    tagNode.innerText = tag.name
 
-    const noteNameDiv = document.createElement("div")
-    noteNameDiv.classList.add("admin-notes__item-name")
+    const numberNode = document.createElement("div")
+    numberNode.classList.add("entities__item-number")
+    numberNode.innerText = index
 
-    noteDiv.append(noteTagDiv)
-    noteDiv.append(noteNumberDiv)
-    noteDiv.append(noteNameDiv)
-    document.getElementById(NOTES_ID).prepend(noteDiv)
-  }
+    const nameNode = document.createElement("div")
+    nameNode.classList.add("entities__item-name")
+    nameNode.innerText = name
 
-  for (let i = 0; i < noteDiv.children.length; i++) {
-    noteDiv.children[i].innerText = innerTextOfElements[i]
+    entityNode.append(tagNode)
+    entityNode.append(numberNode)
+    entityNode.append(nameNode)
+    document.getElementById(CONTENT_ID).prepend(entityNode)
   }
 
   if (isNew) {
-    noteDiv.classList.add("blink-add-note")
+    entityNode.classList.add("blink-add-entity")
   } //blink new note
 }
 
-function renderErrorNote(err) {
-  const noteDiv = document.createElement("div")
-  noteDiv.classList.add("admin-notes__item")
-  noteDiv.classList.add("_anim_item")
-  noteDiv.classList.add("error")
-  noteDiv.innerText = err
-  document.getElementById(NOTES_ID).appendChild(noteDiv)
+function renderErrorEntities(msg) {
+  const err = document.createElement("div")
+  err.classList.add("entities__item")
+  err.classList.add("_anim_item")
+  err.classList.add("error")
+  err.innerText = msg
+  document.getElementById(CONTENT_ID).appendChild(err)
 }
 
-function renderNothingNotes(msg) {
-  const noteDiv = document.createElement("div")
-  noteDiv.classList.add("admin-notes__item")
-  noteDiv.classList.add("_anim_item")
-  noteDiv.innerText = msg
-  document.getElementById(NOTES_ID).appendChild(noteDiv)
+function renderMsg(message) {
+  const msg = document.createElement("div")
+  msg.classList.add("entities__item")
+  msg.classList.add("_anim_item")
+  msg.innerText = message
+  document.getElementById(CONTENT_ID).appendChild(msg)
 }
 
 //add note by pressing Enter
 function onAddNote(e) {
   if (e.key === "Enter") {
-    const noteTextarea = document.getElementById("admin-textarea-new-note")
+    const noteTextarea = document.getElementById("admin-textarea-new-note") //TODO refactor name id
     const noteText = noteTextarea.value
     const tagId = state.currentTag._id
 
@@ -169,7 +169,7 @@ function onAddNote(e) {
         .putNote(state.editingNote)
         .then((res) => {
           if (res.success) {
-            renderNote(res.data, state.countNumberNoteRender, true)
+            renderEntity(res.data, state.numberEntityRendered, true)
             noteTextarea.value = ""
             state.editingNote = null
           }
@@ -188,7 +188,7 @@ function onAddNote(e) {
         .then((res) => {
           if (res.success) {
             //render new note then go back from api
-            renderNote(res.data, state.countNumberNoteRender, true)
+            renderEntity(res.data, state.numberEntityRendered, true)
             noteTextarea.value = ""
           } else {
             // blink border error input if note not saved
@@ -245,12 +245,11 @@ function onChangeInputTag() {
   //add tag to state.current if exist in the database
   const tag = getTagByName(tagName)
   state.currentTag = tag
-
   //rerender notes by filter tag
   if (tag) {
-    return rerenderNotes({ tagId: tag._id })
+    return rerenderNotes({ tag: tag._id })
   }
-  rerenderNotes({ tagId: "nothing" })
+  rerenderNotes({ tag: "nothing" })
 }
 
 function getTagByName(name) {
@@ -262,39 +261,44 @@ function getTagByName(name) {
 //get notes and render them or render error
 function renderNotes(filter) {
   api
-    .getNotes(filter)
+    .getEntities("note", filter)
     .then((res) => {
       //reset numbers notes
       if (res.success) {
-        if (res.data.length === 0) return renderNothingNotes("Записей пока нет")
-        state.countNumberNoteRender = 0
+        if (res.data.length === 0) return renderMsg("Записей пока нет")
+        state.numberEntityRendered = 0
         res.data.forEach((note, index) => {
-          renderNote(note, index)
+          renderEntity(note, index)
         })
       } else {
-        renderNothingNotes("Такого тега нет")
+        renderMsg("Такого тега нет")
       }
     })
     .catch((err) => {
-      renderErrorNote("Нет связи с сервером")
+      renderErrorEntities("Нет связи с сервером")
     })
 }
 
 //get tags and render them in input list or render error
 function renderTags() {
   api
-    .getTags()
-    .then((tags) => {
-      state.tags = tags
-      tags.forEach((tag) => {
-        renderTag(tag)
-      })
+    .getEntities("tag")
+    .then((res) => {
+      if (res.success) {
+        state.tags = res.data
+        res.data.forEach((tag) => {
+          renderTag(tag)
+        })
+      }
     })
-    .catch((err) => renderErrorTag("Нет связи с сервером"))
+    .catch((err) => {
+      console.log("ERROR: ", err)
+      renderErrorTag("Нет связи с сервером")
+    })
 }
 
 function rerenderNotes(filter) {
-  document.getElementById(NOTES_ID).innerHTML = ""
+  document.getElementById(CONTENT_ID).innerHTML = ""
   renderNotes(filter)
 }
 
@@ -346,7 +350,7 @@ function onKeyPressInputCLI(e) {
       document.getElementById(CURRENT_TAG_ID).value = tag.name
       state.currentTag = tag
 
-      rerenderNotes({ tagId: tag._id })
+      rerenderNotes({ tag: tag._id })
     }
   }
 
@@ -376,7 +380,7 @@ function onKeyPressInputCLI(e) {
 
       if (id) {
         api
-          .getNotes({ _id: id })
+          .getEntities("note", { _id: id })
           .then((res) => {
             if (res.success) {
               const [note] = res.data

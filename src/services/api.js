@@ -6,28 +6,18 @@ if (process.env.NODE_ENV === 'production') {
 }
 const URL = `http://${host}:3001/api`
 
-const getPosts = (page) => {
-  return fetch(`${URL}/post/${page}`)
-    .then((response) => response.json())
-    .then((data) => data.data)
-}
-
-const getTags = () => {
-  return fetch(`${URL}/tag/`)
-    .then((response) => response.json())
-    .then((data) => data.data)
-}
-
-const getNotes = (filter = {}) => {
-  let endURL = ""
-  const { tagId, _id } = filter
-  if (tagId) {
-    endURL = `byTag/${tagId}`
+/**
+ * Get entities by name and filter
+ * @param  {string} name     Name of entity
+ * @param  {Object} filter Filter object
+ * @return {Promise} promise
+ */
+const getEntities = (name, filter={}) => {
+  let params = "?"
+  for (let key in filter) {
+    params+=`${key}=${filter[key]}`
   }
-  if (_id) {
-    endURL = `${_id}`
-  }
-  return fetch(`${URL}/note/${endURL}`)
+  return fetch(`${URL}/${name}/${params}`)
     .then((response) => response.json())
 }
 
@@ -55,9 +45,7 @@ const putNote= (note) => {
 }
 
 export const api = {
-  getPosts,
-  getTags,
-  getNotes,
+  getEntities,
   postTag,
   postNote,
   deletePost,
