@@ -69,9 +69,9 @@ function showSlidesCurrentNotes() {
   }
   let filter = {}
   if (state.currentTag) {
-    filter = { tagId: state.currentTag._id }
+    filter = { tag: state.currentTag._id }
   }
-  api.get("note").then((res) => {
+  api.get("note", filter).then((res) => {
     if (res.success) {
       const notesMappedToSlide = res.data.map((note) => ({
         main: note.name,
@@ -167,7 +167,7 @@ function onAddNote(e) {
       state.editingNote.name = noteText
       state.editingNote.tag = tagId
       api
-        .putNote(state.editingNote)
+        .put("note", state.editingNote)
         .then((res) => {
           if (res.success) {
             renderEntity(res.data, state.numberEntityRendered, true)
@@ -213,7 +213,7 @@ function onKeyPressInputTag(e) {
   if (e.key === "Enter") {
     e.preventDefault()
     api
-      .post("tag", newTag.value)
+      .post("tag", { name: newTag.value })
       .then((res) => {
         if (res.success) {
           state.tags.push(res.data)
@@ -362,11 +362,11 @@ function onKeyPressInputCLI(e) {
       const id = el.getAttribute("id")
       if (id) {
         api
-          .deletePost(id)
+          .remove("note", id)
           .then((res) => {
-            console.log(res)
-            //remove note from DOM
-            el.parentNode.removeChild(el)
+            if (res.success) {
+              el.parentNode.removeChild(el)
+            }
           })
           .catch((err) => console.log(err))
       }

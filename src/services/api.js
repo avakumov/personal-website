@@ -1,4 +1,4 @@
-import { postData, deleteData, putData } from "../helpers/utils"
+
 
 let host = "localhost"
 if (process.env.NODE_ENV === "production") {
@@ -21,7 +21,7 @@ const get = (name, filter = {}) => {
 }
 
 /**
- * Get entities by name and filter
+ * Create entity by name of entity
  * @param  {string} name     Name of entity
  * @param  {Object} data Object to save
  * @return {Promise} promise
@@ -30,23 +30,58 @@ const post = (name, data) => {
   return postData(`${URL}/${name}`, data).then((data) => data.json())
 }
 
-const deletePost = (id) => {
-  return deleteData(`${URL}/note/${id}`)
+/**
+ * Remove entity by id
+ * @param  {string} name     Name of entity
+ * @param  {Object} data Object to delete
+ * @return {Promise} promise
+ */
+const remove = (name, id) => {
+  return deleteData(`${URL}/${name}/${id}`)
     .then((response) => response.json())
-    .then((data) => data.data)
 }
 
-const putNote = (note) => {
-  const id = note._id
-  if (id) {
-    delete note._id
-  }
-  return putData(`${URL}/note/${id}`, note).then((response) => response.json())
+
+const put = (name, entity) => {
+  // const id = entity._id
+  // if (id) {
+  //   delete note._id
+  // }
+  return putData(`${URL}/${name}/${entity._id}`, entity).then((response) => response.json())
 }
 
 export const api = {
   get,
   post,
-  deletePost,
-  putNote,
+  remove,
+  put,
+}
+
+function postData  (url = "", data = {}) {
+  return fetch(url, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+  })
+}
+
+function deleteData (url = "")  {
+  return fetch(url, {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  })
+}
+
+function putData(url = "", data = {})  {
+  return fetch(url, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+  })
 }
