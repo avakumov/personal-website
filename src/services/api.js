@@ -1,7 +1,7 @@
 import { postData, deleteData, putData } from "../helpers/utils"
 
 let host = "localhost"
-if (process.env.NODE_ENV === 'production') {
+if (process.env.NODE_ENV === "production") {
   host = "avamir.ru"
 }
 const URL = `http://${host}:3001/api`
@@ -12,13 +12,22 @@ const URL = `http://${host}:3001/api`
  * @param  {Object} filter Filter object
  * @return {Promise} promise
  */
-const getEntities = (name, filter={}) => {
+const get = (name, filter = {}) => {
   let params = "?"
   for (let key in filter) {
-    params+=`${key}=${filter[key]}`
+    params += `${key}=${filter[key]}`
   }
-  return fetch(`${URL}/${name}/${params}`)
-    .then((response) => response.json())
+  return fetch(`${URL}/${name}/${params}`).then((response) => response.json())
+}
+
+/**
+ * Get entities by name and filter
+ * @param  {string} name     Name of entity
+ * @param  {Object} data Object to save
+ * @return {Promise} promise
+ */
+const post = (name, data) => {
+  return postData(`${URL}/${name}`, data).then((data) => data.json())
 }
 
 const deletePost = (id) => {
@@ -27,27 +36,17 @@ const deletePost = (id) => {
     .then((data) => data.data)
 }
 
-const postTag = (tagName) => {
-  return postData(`${URL}/tag`, { name: tagName }).then((data) => data.json())
-}
-
-const postNote = (note) => {
-  return postData(`${URL}/note`, note).then((data) => data.json())
-}
-
-const putNote= (note) => {
+const putNote = (note) => {
   const id = note._id
   if (id) {
     delete note._id
   }
-  return putData(`${URL}/note/${id}`, note)
-    .then((response) => response.json())
+  return putData(`${URL}/note/${id}`, note).then((response) => response.json())
 }
 
 export const api = {
-  getEntities,
-  postTag,
-  postNote,
+  get,
+  post,
   deletePost,
-  putNote
+  putNote,
 }

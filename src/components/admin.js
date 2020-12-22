@@ -71,7 +71,7 @@ function showSlidesCurrentNotes() {
   if (state.currentTag) {
     filter = { tagId: state.currentTag._id }
   }
-  api.getEntities("note").then((res) => {
+  api.get("note").then((res) => {
     if (res.success) {
       const notesMappedToSlide = res.data.map((note) => ({
         main: note.name,
@@ -154,6 +154,7 @@ function renderMsg(message) {
 }
 
 //add note by pressing Enter
+//FIXME entity have wrong index and render empty entities
 function onAddNote(e) {
   if (e.key === "Enter") {
     const noteTextarea = document.getElementById("admin-textarea-new-note") //TODO refactor name id
@@ -184,7 +185,7 @@ function onAddNote(e) {
     if (tagId && noteText) {
       const newNote = { tag: tagId, name: noteText }
       api
-        .postNote(newNote)
+        .post("note", newNote)
         .then((res) => {
           if (res.success) {
             //render new note then go back from api
@@ -212,7 +213,7 @@ function onKeyPressInputTag(e) {
   if (e.key === "Enter") {
     e.preventDefault()
     api
-      .postTag(newTag.value)
+      .post("tag", newTag.value)
       .then((res) => {
         if (res.success) {
           state.tags.push(res.data)
@@ -261,7 +262,7 @@ function getTagByName(name) {
 //get notes and render them or render error
 function renderNotes(filter) {
   api
-    .getEntities("note", filter)
+    .get("note", filter)
     .then((res) => {
       //reset numbers notes
       if (res.success) {
@@ -282,7 +283,7 @@ function renderNotes(filter) {
 //get tags and render them in input list or render error
 function renderTags() {
   api
-    .getEntities("tag")
+    .get("tag")
     .then((res) => {
       if (res.success) {
         state.tags = res.data
@@ -380,7 +381,7 @@ function onKeyPressInputCLI(e) {
 
       if (id) {
         api
-          .getEntities("note", { _id: id })
+          .get("note", { _id: id })
           .then((res) => {
             if (res.success) {
               const [note] = res.data
