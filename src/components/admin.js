@@ -102,38 +102,38 @@ function renderEntity(entity, index, isNew = false) {
   let entityNode = document.getElementById(_id)
 
   if (entityNode) {
-    const oldIndex = entityNode.getAttribute("number")
-    index = oldIndex
-  } else {
-    state.numberEntityRendered++
-    entityNode = document.createElement("div")
-    entityNode.classList.add("entities__item")
-    entityNode.classList.add("_anim_item")
-    //for refer edit, delete
-    entityNode.setAttribute("id", _id)
-    entityNode.setAttribute("number", index)
-
-    const tagNode = document.createElement("div")
-    tagNode.classList.add("entities__item-tag")
-    tagNode.innerText = tag.name
-
-    const numberNode = document.createElement("div")
-    numberNode.classList.add("entities__item-number")
-    numberNode.innerText = index
-
-    const nameNode = document.createElement("div")
-    nameNode.classList.add("entities__item-name")
-    nameNode.innerText = name
-
-    entityNode.append(tagNode)
-    entityNode.append(numberNode)
-    entityNode.append(nameNode)
-    document.getElementById(CONTENT_ID).prepend(entityNode)
+    //rerender
+    return (entityNode.querySelector(".entities__item-name").innerText = name)
   }
+  //render
+  state.numberEntityRendered++
+  entityNode = document.createElement("div")
+  entityNode.classList.add("entities__item")
+  entityNode.classList.add("_anim_item")
+  //for refer edit, delete
+  entityNode.setAttribute("id", _id)
+  entityNode.setAttribute("number", index)
 
+  const tagNode = document.createElement("div")
+  tagNode.classList.add("entities__item-tag")
+  tagNode.innerText = tag.name
+
+  const numberNode = document.createElement("div")
+  numberNode.classList.add("entities__item-number")
+  numberNode.innerText = index
+
+  const nameNode = document.createElement("div")
+  nameNode.classList.add("entities__item-name")
+  nameNode.innerText = name
+
+  entityNode.append(tagNode)
+  entityNode.append(numberNode)
+  entityNode.append(nameNode)
+  document.getElementById(CONTENT_ID).prepend(entityNode)
+  //blink new note
   if (isNew) {
     entityNode.classList.add("blink-add-entity")
-  } //blink new note
+  }
 }
 
 function renderErrorEntities(msg) {
@@ -154,7 +154,6 @@ function renderMsg(message) {
 }
 
 //add note by pressing Enter
-//FIXME entity have wrong index and render empty entities
 function onAddNote(e) {
   if (e.key === "Enter") {
     const noteTextarea = document.getElementById("admin-textarea-new-note") //TODO refactor name id
@@ -170,7 +169,7 @@ function onAddNote(e) {
         .put("note", state.editingNote)
         .then((res) => {
           if (res.success) {
-            renderEntity(res.data, state.numberEntityRendered, true)
+            renderEntity(res.data, state.numberEntityRendered)
             noteTextarea.value = ""
             state.editingNote = null
           }
@@ -375,7 +374,7 @@ function onKeyPressInputCLI(e) {
 
   function editCommand(value) {
     const number = Number.parseInt(value)
-    if (number) {
+    if (number || number === 0) {
       const el = document.querySelector(`[number="${value}"]`)
       const id = el.getAttribute("id")
 
