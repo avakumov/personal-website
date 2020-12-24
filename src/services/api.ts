@@ -14,7 +14,7 @@ const get = (name: string, filter: any = {}) => {
   let params = "?"
   for (const key in filter) {
     if (filter.hasOwnProperty(key)) {
-      params += `${key}=${filter[key]}`
+      params += `${key}=${filter[key]}&`
     }
   }
   return fetch(`${URL}/${name}/${params}`).then((response) => response.json())

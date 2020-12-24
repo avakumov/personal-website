@@ -11,20 +11,20 @@ function init() {
   let noMorePosts = false
 
   //Создание счетчика запросов постов. При каждом вызове увелисивается, возвращает текущее значение
-  const getPagePost = createPageCounter() // TODO use page in fetch
+  const getPagePost = createPageCounter() 
 
   //Прослушка скролла на запрос новых постов
   window.addEventListener("scroll", () => {
     if (isFetchPost(300) && !isFetchingPosts && !noMorePosts) {
       isFetchingPosts = true
-      api.get("post").then((res) => {
+      api.get("post", { page: getPagePost() }).then((res) => {
         if (res.success) {
           res.data.forEach((post) => {
             addPost(post)
           })
           isFetchingPosts = false
 
-          if (posts.length === 0) {
+          if (res.data.length === 0) {
             noMorePosts = true
           }
         }
