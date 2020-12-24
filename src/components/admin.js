@@ -373,9 +373,9 @@ function onKeyPressInputCLI(e) {
   }
 
   function editCommand(value) {
-    const number = Number.parseInt(value)
-    if (number || number === 0) {
-      const el = document.querySelector(`[number="${value}"]`)
+    const num = Number.parseInt(value, 10)
+    if (num || num === 0) {
+      const el = document.querySelector(`[number="${num}"]`)
       const id = el.getAttribute("id")
 
       if (id) {

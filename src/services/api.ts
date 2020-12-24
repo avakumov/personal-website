@@ -1,5 +1,3 @@
-
-
 let host = "localhost"
 if (process.env.NODE_ENV === "production") {
   host = "avamir.ru"
@@ -12,37 +10,35 @@ const URL = `http://${host}:3001/api`
  * @param  {Object} filter Filter object
  * @return {Promise} promise
  */
-const get = (name, filter = {}) => {
+const get = (name: string, filter: any = {}) => {
   let params = "?"
-  for (let key in filter) {
-    params += `${key}=${filter[key]}`
+  for (const key in filter) {
+    if (filter.hasOwnProperty(key)) {
+      params += `${key}=${filter[key]}`
+    }
   }
   return fetch(`${URL}/${name}/${params}`).then((response) => response.json())
 }
-
 /**
  * Create entity by name of entity
  * @param  {string} name     Name of entity
  * @param  {Object} data Object to save
  * @return {Promise} promise
  */
-const post = (name, data) => {
-  return postData(`${URL}/${name}`, data).then((data) => data.json())
+const post = (name: string, data: any) => {
+  return postData(`${URL}/${name}`, data).then((response) => response.json())
 }
-
 /**
  * Remove entity by id
  * @param  {string} name     Name of entity
  * @param  {Object} data Object to delete
  * @return {Promise} promise
  */
-const remove = (name, id) => {
-  return deleteData(`${URL}/${name}/${id}`)
-    .then((response) => response.json())
+const remove = (name: string, id: string) => {
+  return deleteData(`${URL}/${name}/${id}`).then((response) => response.json())
 }
 
-
-const put = (name, entity) => {
+const put = (name: string, entity: any) => {
   // const id = entity._id
   // if (id) {
   //   delete note._id
@@ -57,7 +53,7 @@ export const api = {
   put,
 }
 
-function postData  (url = "", data = {}) {
+function postData(url = "", data = {}) {
   return fetch(url, {
     method: "POST",
     headers: {
@@ -67,7 +63,7 @@ function postData  (url = "", data = {}) {
   })
 }
 
-function deleteData (url = "")  {
+function deleteData(url = "") {
   return fetch(url, {
     method: "DELETE",
     headers: {
@@ -76,7 +72,7 @@ function deleteData (url = "")  {
   })
 }
 
-function putData(url = "", data = {})  {
+function putData(url = "", data = {}) {
   return fetch(url, {
     method: "PUT",
     headers: {

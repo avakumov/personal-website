@@ -1,7 +1,7 @@
 function init() {
   const menuItems = document.getElementsByClassName("_menu-item")
   const miArr = [...menuItems]
-  miArr.forEach(menuItem => {
+  miArr.forEach((menuItem) => {
     menuItem.addEventListener("click", () => handleClickMenuItem(menuItem.getAttribute("id")))
   })
   let html = ""
@@ -18,13 +18,11 @@ function init() {
         document.getElementById("posts").innerHTML = html
         window.pageYOffset = positionY
         break
-        
       }
     }
   }
 }
 
-
 export const menu = {
   init,
-};
+}

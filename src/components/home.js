@@ -11,21 +11,22 @@ function init() {
   let noMorePosts = false
 
   //Создание счетчика запросов постов. При каждом вызове увелисивается, возвращает текущее значение
-  const getPagePost = createPageCounter()
+  const getPagePost = createPageCounter() // TODO use page in fetch
 
   //Прослушка скролла на запрос новых постов
   window.addEventListener("scroll", () => {
     if (isFetchPost(300) && !isFetchingPosts && !noMorePosts) {
       isFetchingPosts = true
+      api.get("post").then((res) => {
+        if (res.success) {
+          res.data.forEach((post) => {
+            addPost(post)
+          })
+          isFetchingPosts = false
 
-      api.getPosts(getPagePost()).then((posts) => {
-        posts.forEach((post) => {
-          addPost(post)
-        })
-        isFetchingPosts = false
-
-        if (posts.length === 0) {
-          noMorePosts = true
+          if (posts.length === 0) {
+            noMorePosts = true
+          }
         }
       })
     }
@@ -42,7 +43,7 @@ function createPageCounter() {
 
 //Проверка необходимости запроса постов, delta - длина в пикселях до конца тела страницы
 function isFetchPost(delta) {
-  const lastPost = document.getElementById("posts").lastChild
+  const lastPost = document.querySelector("#posts")
   const ItemRect = lastPost.getBoundingClientRect()
   const bottomItem = ItemRect.bottom
   const windowHeigth = window.innerHeight
@@ -78,5 +79,5 @@ function addPost(post) {
 }
 
 export const home = {
-    init
+  init,
 }

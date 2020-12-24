@@ -4,11 +4,9 @@ import { admin } from "./components/admin"
 import { home } from "./components/home"
 import { animateOnScroll } from "./helpers/utils"
 
-
-
 auth.init()
 
-//init different page init depending on the path
+// init different page init depending on the path
 const path = window.location.pathname.replace(/^\/|\/$/g, "")
 if (path === "adm") {
   admin.init()
@@ -17,5 +15,3 @@ if (path === "adm") {
 }
 
 window.addEventListener("scroll", () => animateOnScroll(50))
-
-

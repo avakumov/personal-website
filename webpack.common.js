@@ -9,7 +9,7 @@ const ASSET_PATH = process.env.ASSET_PATH || "";
 
 module.exports = {
 
-  entry: "./src/index.js",
+  entry: "./src/index.ts",
   output: {
     filename: "bundle.js",
     path: path.resolve(__dirname, "dist"),
@@ -37,6 +37,12 @@ module.exports = {
   module: {
     rules: [
       {
+        test: /\.tsx?$/,
+        include: [path.resolve(__dirname, 'src')],
+        use: 'ts-loader'
+       
+      },
+      {
         test: /\.(s*)css$/,
         use: [miniCss.loader, "css-loader", "sass-loader"],
       },
@@ -56,5 +62,8 @@ module.exports = {
         },
       },
     ],
+  },
+  resolve: {
+    extensions: [ '.tsx', '.ts', '.js' ],
   },
 };

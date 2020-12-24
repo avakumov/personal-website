@@ -1,7 +1,7 @@
 #build personal-website
+git pull
 rm -R node_modules
 rm -R dist
-#git pull
 npm i
 npm run build
 
@@ -11,7 +11,7 @@ rm -R node_modules
 rm -R dist
 npm i
 gulp build-prod
-#sub domain link
+#subdomain link
 cp nginx /etc/nginx/sites-enabled/portfolio-windows
 #back to the main dir
 cd ../..
