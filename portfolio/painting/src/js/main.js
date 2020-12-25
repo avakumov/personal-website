@@ -1,4 +1,4 @@
-import modals from "./modules"
+import modals from "./modules/modals"
 
 window.addEventListener("DOMContentLoaded", () => {
   "use strict"
