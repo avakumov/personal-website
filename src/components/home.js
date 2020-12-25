@@ -65,7 +65,7 @@ function addPost(post) {
 
   const contentDiv = document.createElement("div")
   contentDiv.classList.add("page__text-block-content")
-  contentDiv.innerText = toHtml(post.content)
+  contentDiv.innerHTML = toHtml(post.content)
 
   postDiv.appendChild(titleDiv)
   postDiv.appendChild(contentDiv)
