@@ -1,6 +1,7 @@
 const forms = () => {
   const form = document.querySelectorAll("form")
   const inputs = document.querySelectorAll("input")
+  const upload = document.querySelectorAll('[name="upload"]')
 
   const message = {
     loading: "Downloading...",
@@ -32,7 +33,21 @@ const forms = () => {
     inputs.forEach((item) => {
       item.value = ""
     })
+    upload.forEach((item) => {
+      item.previousElementSibling.previousElementSibling.textContent = "Загрузить фотографию"
+    })
   }
+  upload.forEach((item) => {
+    item.addEventListener("input", () => {
+      let dots
+      const filename = item.files[0].name.split(".")[0]
+      const extention = item.files[0].name.split(".")[1]
+      filename.length > 5 ? (dots = "...") : (dots = ".")
+      const name = filename.substring(0, 6) + dots + extention
+      item.previousElementSibling.previousElementSibling.textContent = name
+      console.log(name)
+    })
+  })
 
   form.forEach((item) => {
     item.addEventListener("submit", (e) => {
