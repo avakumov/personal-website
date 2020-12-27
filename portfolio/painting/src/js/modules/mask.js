@@ -23,8 +23,6 @@ export default function mask(selector) {
 
     if (def.length >= val.length) {
       val = def
-      console.log("def:", def)
-      console.log("val:", val)
     }
     this.value = matrix.replace(/./g, (a) =>
       /[_\d]/.test(a) && i < val.length ? val.charAt(i++) : i >= val.length ? "" : a
