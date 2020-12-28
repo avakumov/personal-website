@@ -5,6 +5,7 @@ import mask from "./modules/mask"
 import validateInput from "./modules/validateInput"
 import showMoreStyles from "./modules/showMoreStyles"
 import calc from "./modules/calc"
+import filter from "./modules/filter"
 
 window.addEventListener("DOMContentLoaded", () => {
   "use strict"
@@ -17,4 +18,5 @@ window.addEventListener("DOMContentLoaded", () => {
   validateInput("[name='message']")
   showMoreStyles(".styles-2", ".button-styles")
   calc("#size", "#material", "#options", ".promocode", ".calc-price")
+  filter()
 })
