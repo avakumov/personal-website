@@ -17,9 +17,9 @@ const modals = () => {
           item.remove()
         }
 
-        windows.forEach((item) => {
-          item.style.display = "none"
-          item.classList.add("animated", "fadeIn")
+        windows.forEach((i) => {
+          i.style.display = "none"
+          i.classList.add("animated", "fadeIn")
         })
 
         modal.style.display = "block"
