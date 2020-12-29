@@ -67,7 +67,7 @@ export default function filter() {
   menu.addEventListener("click", (e) => {
     let target = e.target
 
-    if (target && target.tagName == "LI") {
+    if (target && target.tagName === "LI") {
       items.forEach((btn) => btn.classList.remove("active"))
       target.classList.add("active")
     }

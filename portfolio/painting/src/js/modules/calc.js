@@ -11,7 +11,7 @@ export default function calc(size, material, options, promocode, result) {
     sum = Math.round(
       Number(sizeBlock.value) * Number(materialBlock.value) + Number(optionsBlock.value)
     )
-    if (sizeBlock.value == "" || materialBlock.value == "") {
+    if (sizeBlock.value === "" || materialBlock.value === "") {
       resultBlock.textContent = "Выберете размер и материал картины"
     } else if (promocodeBlock.value === "IWANTPOPART") {
       resultBlock.textContent = Math.round(sum * 0.7) + " RUB"

@@ -45,7 +45,6 @@ const forms = () => {
       filename.length > 5 ? (dots = "...") : (dots = ".")
       const name = filename.substring(0, 6) + dots + extention
       item.previousElementSibling.previousElementSibling.textContent = name
-      console.log(name)
     })
   })
 
