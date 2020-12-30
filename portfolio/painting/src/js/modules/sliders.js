@@ -55,6 +55,7 @@ const sliders = (slides, direction, prev, next) => {
       clearInterval(interval)
     })
     items[0].parentNode.addEventListener("mouseleave", () => {
+      clearInterval(interval)
       activateAnimation()
     })
   }
