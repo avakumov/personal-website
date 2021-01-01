@@ -34,7 +34,7 @@ const forms = () => {
       item.value = ""
     })
     upload.forEach((item) => {
-      item.previousElementSibling.previousElementSibling.textContent = "Загрузить фотографию"
+      item.previousElementSibling.textContent = "Загрузить фотографию"
     })
   }
   upload.forEach((item) => {
@@ -44,7 +44,7 @@ const forms = () => {
       const extention = item.files[0].name.split(".")[1]
       filename.length > 5 ? (dots = "...") : (dots = ".")
       const name = filename.substring(0, 6) + dots + extention
-      item.previousElementSibling.previousElementSibling.textContent = name
+      item.previousElementSibling.textContent = name
     })
   })
 
