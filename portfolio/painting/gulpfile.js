@@ -93,3 +93,5 @@ gulp.task("build-prod-js", () => {
 });
 
 gulp.task("default", gulp.parallel("watch", "build"));
+
+gulp.task("build-prod", gulp.parallel("copy-html", "copy-assets", "build-prod-js"));
