@@ -1,6 +1,21 @@
 //variables
 @import "./utils/vars.scss";
 
+
+.auth-google {
+  padding: 10px;
+  margin-top: 20px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  & a {
+    border: $textColor solid 1px;
+    color: $textColor;
+    padding: 5px;
+    margin-left: 15px;
+  }
+  
+}
 .header {
   position: sticky;
   top: 0;

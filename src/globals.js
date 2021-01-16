@@ -8,5 +8,6 @@ module.exports = {
     SLIDES_ID: "container-slide",
     CLI_ID: "admin-cli",
     TAGS_ID: "admin-tags-notes",
-    CONTENT_ID: "content"
+    CONTENT_ID: "content",
+    URL_API: process.env.NODE_ENV === "production" ? "http://avakumov.ru:3001/api" : "http://localhost:3001/api"
 }

@@ -1,8 +1,5 @@
-let host = "localhost"
-if (process.env.NODE_ENV === "production") {
-  host = "avamir.ru"
-}
-const URL = `http://${host}:3001/api`
+
+const {URL_API: URL } = require("../globals")
 
 /**
  * Get entities by name and filter
@@ -17,7 +14,7 @@ const get = (name: string, filter: any = {}) => {
       params += `${key}=${filter[key]}&`
     }
   }
-  return fetch(`${URL}/${name}/${params}`).then((response) => response.json())
+  return fetch(`${URL}/${name}/${params}`, {method: "GET", credentials: "include"}).then((response) => response.json())
 }
 /**
  * Create entity by name of entity
@@ -46,16 +43,22 @@ const put = (name: string, entity: any) => {
   return putData(`${URL}/${name}/${entity._id}`, entity).then((response) => response.json())
 }
 
+const getProfile = ()=> {
+  return fetch(`${URL}/auth/profile`, {method: "GET", credentials: "include"}).then((response) => response.json())
+}
+
 export const api = {
   get,
   post,
   remove,
   put,
+  getProfile
 }
 
 function postData(url = "", data = {}) {
   return fetch(url, {
     method: "POST",
+    credentials: "include",
     headers: {
       "Content-Type": "application/json",
     },
@@ -66,8 +69,10 @@ function postData(url = "", data = {}) {
 function deleteData(url = "") {
   return fetch(url, {
     method: "DELETE",
+    credentials: "include",
     headers: {
       "Content-Type": "application/json",
+      
     },
   })
 }
@@ -75,8 +80,10 @@ function deleteData(url = "") {
 function putData(url = "", data = {}) {
   return fetch(url, {
     method: "PUT",
+    credentials: "include",
     headers: {
       "Content-Type": "application/json",
+      
     },
     body: JSON.stringify(data),
   })
