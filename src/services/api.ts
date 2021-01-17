@@ -1,5 +1,10 @@
+import { URL_API as URL } from "../globals"
 
-const {URL_API: URL } = require("../globals")
+interface Response {
+  success: boolean
+  error?: string
+  data?: []
+}
 
 /**
  * Get entities by name and filter
@@ -7,14 +12,16 @@ const {URL_API: URL } = require("../globals")
  * @param  {Object} filter Filter object
  * @return {Promise} promise
  */
-const get = (name: string, filter: any = {}) => {
+const get = (name: string, filter: any = {}) : Promise<Response> => {
   let params = "?"
   for (const key in filter) {
     if (filter.hasOwnProperty(key)) {
       params += `${key}=${filter[key]}&`
     }
   }
-  return fetch(`${URL}/${name}/${params}`, {method: "GET", credentials: "include"}).then((response) => response.json())
+  return fetch(`${URL}/${name}/${params}`, { method: "GET", credentials: "include" }).then((response) =>
+    response.json()
+  )
 }
 /**
  * Create entity by name of entity
@@ -22,7 +29,7 @@ const get = (name: string, filter: any = {}) => {
  * @param  {Object} data Object to save
  * @return {Promise} promise
  */
-const post = (name: string, data: any) => {
+const post = (name: string, data: any) : Promise<Response> => {
   return postData(`${URL}/${name}`, data).then((response) => response.json())
 }
 /**
@@ -31,20 +38,16 @@ const post = (name: string, data: any) => {
  * @param  {Object} data Object to delete
  * @return {Promise} promise
  */
-const remove = (name: string, id: string) => {
+const remove = (name: string, id: string) : Promise<Response> => {
   return deleteData(`${URL}/${name}/${id}`).then((response) => response.json())
 }
 
-const put = (name: string, entity: any) => {
-  // const id = entity._id
-  // if (id) {
-  //   delete note._id
-  // }
+const put = (name: string, entity: any): Promise<Response> => {
   return putData(`${URL}/${name}/${entity._id}`, entity).then((response) => response.json())
 }
 
-const getProfile = ()=> {
-  return fetch(`${URL}/auth/profile`, {method: "GET", credentials: "include"}).then((response) => response.json())
+const getProfile = (): Promise<Response>  => {
+  return fetch(`${URL}/auth/profile`, { method: "GET", credentials: "include" }).then((response) => response.json())
 }
 
 export const api = {
@@ -52,7 +55,7 @@ export const api = {
   post,
   remove,
   put,
-  getProfile
+  getProfile,
 }
 
 function postData(url = "", data = {}) {
@@ -72,7 +75,6 @@ function deleteData(url = "") {
     credentials: "include",
     headers: {
       "Content-Type": "application/json",
-      
     },
   })
 }
@@ -83,7 +85,6 @@ function putData(url = "", data = {}) {
     credentials: "include",
     headers: {
       "Content-Type": "application/json",
-      
     },
     body: JSON.stringify(data),
   })
