@@ -1,14 +1,13 @@
-const path = require("path");
-const htmlWebpackPlugin = require("html-webpack-plugin");
-const miniCss = require("mini-css-extract-plugin");
-const webpack = require("webpack");
+const path = require("path")
+const htmlWebpackPlugin = require("html-webpack-plugin")
+const miniCss = require("mini-css-extract-plugin")
+const webpack = require("webpack")
 
-const globals = require("./src/globals");
+const globals = require("./src/globals")
 
-const ASSET_PATH = process.env.ASSET_PATH || "";
+const ASSET_PATH = process.env.ASSET_PATH || ""
 
 module.exports = {
-
   entry: "./src/index.ts",
   output: {
     filename: "bundle.js",
@@ -38,9 +37,8 @@ module.exports = {
     rules: [
       {
         test: /\.tsx?$/,
-        include: [path.resolve(__dirname, 'src')],
-        use: 'ts-loader'
-       
+        include: [path.resolve(__dirname, "src")],
+        use: "ts-loader",
       },
       {
         test: /\.(s*)css$/,
@@ -64,6 +62,6 @@ module.exports = {
     ],
   },
   resolve: {
-    extensions: [ '.tsx', '.ts', '.js' ],
+    extensions: [".tsx", ".ts", ".js"],
   },
-};
+}

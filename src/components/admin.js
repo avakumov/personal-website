@@ -66,10 +66,11 @@ async function login(e) {
   if (e) {
     e.preventDefault()
     try {
-      const { success, data: profile } = await api.getProfile()
+      const { success } = await api.getProfile()
       if (success) {
         window.location.href = `${URL_API}/auth/logout`
       } else {
+        window.sessionStorage.setItem("pathBeforeAuth", window.location.href)
         window.location.href = `${URL_API}/auth/google`
       }
     } catch (err) {
@@ -80,6 +81,12 @@ async function login(e) {
       const { success, data: profile } = await api.getProfile()
       if (success) {
         //mount user profile
+        const path = window.sessionStorage.getItem("pathBeforeAuth")
+        if (path) {
+          window.location.href = path
+          window.sessionStorage.removeItem("pathBeforeAuth")
+        }
+        console.log()
         renderProfile(profile)
       }
     } catch (err) {
@@ -309,7 +316,7 @@ function renderNotes(filter) {
         renderMsg("Такого тега нет")
       }
     })
-    .catch((err) => {
+    .catch(() => {
       renderErrorEntities("Нет связи с сервером")
     })
 }

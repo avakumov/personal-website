@@ -2,7 +2,7 @@
 
 function animateOnScroll(deltaY) {
   const animItems = document.querySelectorAll("._anim_item")
-  animItems.forEach((el, index) => {
+  animItems.forEach((el) => {
     const ItemRect = el.getBoundingClientRect()
     const topItem = ItemRect.top
     const bottomItem = ItemRect.bottom

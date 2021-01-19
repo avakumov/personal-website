@@ -21,12 +21,12 @@ const loginPopupClose = () => {
 }
 
 const loginRequest = () => {
-  const email = document.getElementById("login-email").value
-  const password = document.getElementById("login-password").value
-  const data = {
-    identifier: email,
-    password: password,
-  }
+  // const email = document.getElementById("login-email").value
+  // const password = document.getElementById("login-password").value
+  // const data = {
+  //   identifier: email,
+  //   password: password,
+  // }
 }
 
 export const auth = {
