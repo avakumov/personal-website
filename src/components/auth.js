@@ -1,4 +1,3 @@
-
 function init() {
   const el = document.getElementById("auth-btn")
   el ? el.addEventListener("click", loginPopupOpen) : ""

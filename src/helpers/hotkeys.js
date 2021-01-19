@@ -5,13 +5,10 @@ const isEqual = (a, b) => {
     return false
   }
 
-  return aKeys.every(
-    (k) => Object.prototype.hasOwnProperty.call(b, k) && a[k] === b[k]
-  )
+  return aKeys.every((k) => Object.prototype.hasOwnProperty.call(b, k) && a[k] === b[k])
 }
 
-const isArrayEqual = (a, b) =>
-  a.length === b.length && a.every((v, i) => isEqual(v, b[i]))
+const isArrayEqual = (a, b) => a.length === b.length && a.every((v, i) => isEqual(v, b[i]))
 
 export const matchHotkey = (buffer, hotkey) => {
   if (buffer.length < hotkey.length) {
@@ -28,8 +25,7 @@ export const matchHotkey = (buffer, hotkey) => {
   return true
 }
 
-const arrayToObject = (arr) =>
-  arr.reduce((obj, key) => ({ ...obj, [key]: true }), {})
+const arrayToObject = (arr) => arr.reduce((obj, key) => ({ ...obj, [key]: true }), {})
 
 const allModifiers = ["ctrl", "shift", "alt", "meta"]
 const indexedModifiers = arrayToObject(allModifiers)
@@ -44,10 +40,7 @@ const validate = (value, message) => {
 }
 
 const validateType = (value, name, type) => {
-  validate(
-    typeof value === type,
-    `The ${name} must be a ${type}; given ${typeof value}`
-  )
+  validate(typeof value === type, `The ${name} must be a ${type}; given ${typeof value}`)
 }
 
 export const normalizeHotkey = (hotkey) =>
@@ -122,7 +115,7 @@ const createKeyDownListener = (listeners, debounceTime) => {
     if (event.repeat) {
       return
     }
-    //TODO error getModifierState is not a function at HTMLDocument.<anonymous> 
+    //TODO error getModifierState is not a function at HTMLDocument.<anonymous>
     // if (event.getModifierState(event.key)) {
     //   return
     // }

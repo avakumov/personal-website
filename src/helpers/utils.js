@@ -1,5 +1,3 @@
-
-
 function animateOnScroll(deltaY) {
   const animItems = document.querySelectorAll("._anim_item")
   animItems.forEach((el) => {

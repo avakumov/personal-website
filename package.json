@@ -8,7 +8,8 @@
     "test": "test",
     "build": "webpack --config webpack.prod.js",
     "dev": "webpack serve --config webpack.dev.js",
-    "lint": "./node_modules/eslint/bin/eslint.js --fix ."
+    "lint": "./node_modules/eslint/bin/eslint.js --fix .",
+    "format": "./node_modules/prettier/bin-prettier.js --write ./**/*.{js,jsx,ts,tsx,css,md,json} --config ./.prettierrc"
   },
   "author": "Avakumov Vladimir",
   "license": "ISC",
@@ -26,6 +27,7 @@
     "html-webpack-plugin": "^4.4.1",
     "mini-css-extract-plugin": "^1.2.1",
     "node-sass": "^5.0.0",
+    "prettier": "^2.2.1",
     "sass-loader": "^10.0.5",
     "ts-loader": "^8.0.13",
     "typescript": "^4.1.3",
