@@ -11,6 +11,11 @@
     "lint": "./node_modules/eslint/bin/eslint.js --fix .",
     "format": "./node_modules/prettier/bin-prettier.js --write ./**/*.{js,jsx,ts,tsx,css,md,json} --config ./.prettierrc"
   },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm run format && npm run lint"
+    }
+  },
   "author": "Avakumov Vladimir",
   "license": "ISC",
   "dependencies": {
@@ -25,6 +30,7 @@
     "eslint": "^7.18.0",
     "file-loader": "^6.2.0",
     "html-webpack-plugin": "^4.4.1",
+    "husky": "^4.3.8",
     "mini-css-extract-plugin": "^1.2.1",
     "node-sass": "^5.0.0",
     "prettier": "^2.2.1",
