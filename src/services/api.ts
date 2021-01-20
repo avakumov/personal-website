@@ -1,9 +1,29 @@
 import { URL_API as URL } from "../globals"
 
-interface Response {
+interface Res {
   success: boolean
   error?: string
   data?: []
+}
+enum Provider {
+  google = "google",
+}
+enum UserType {
+  soldier = "soldier",
+  admin = "admin",
+}
+export interface Profile {
+  name: string
+  email: string
+  provider: Provider
+  avatar: string
+  provider_user_id: number
+  type: UserType
+}
+
+interface ResProfile {
+  success: boolean
+  data: Profile
 }
 
 /**
@@ -12,7 +32,7 @@ interface Response {
  * @param  {Object} filter Filter object
  * @return {Promise} promise
  */
-const get = (name: string, filter: any = {}): Promise<Response> => {
+const get = (name: string, filter: any = {}): Promise<Res> => {
   let params = "?"
   for (const key in filter) {
     if (filter.hasOwnProperty(key)) {
@@ -30,7 +50,7 @@ const get = (name: string, filter: any = {}): Promise<Response> => {
  * @param  {Object} data Object to save
  * @return {Promise} promise
  */
-const post = (name: string, data: any): Promise<Response> => {
+const post = (name: string, data: any): Promise<Res> => {
   return postData(`${URL}/${name}`, data).then((response) => response.json())
 }
 /**
@@ -39,15 +59,15 @@ const post = (name: string, data: any): Promise<Response> => {
  * @param  {Object} data Object to delete
  * @return {Promise} promise
  */
-const remove = (name: string, id: string): Promise<Response> => {
+const remove = (name: string, id: string): Promise<Res> => {
   return deleteData(`${URL}/${name}/${id}`).then((response) => response.json())
 }
 
-const put = (name: string, entity: any): Promise<Response> => {
+const put = (name: string, entity: any): Promise<Res> => {
   return putData(`${URL}/${name}/${entity._id}`, entity).then((response) => response.json())
 }
 
-const getProfile = (): Promise<Response> => {
+const getProfile = (): Promise<ResProfile> => {
   return fetch(`${URL}/auth/profile`, { method: "GET", credentials: "include" }).then((response) =>
     response.json()
   )

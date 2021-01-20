@@ -1,7 +1,8 @@
 import { api } from "../services/api"
 import { createContext } from "../helpers/hotkeys"
 import { ShowSlides } from "./slide"
-import { CURRENT_TAG_ID, SLIDES_ID, CLI_ID, TAGS_ID, CONTENT_ID, URL_API } from "../globals"
+import { CURRENT_TAG_ID, SLIDES_ID, CLI_ID, TAGS_ID, CONTENT_ID } from "../globals"
+import { auth } from "../index"
 
 //TODO relocate state
 const state = {
@@ -13,7 +14,6 @@ const state = {
 }
 
 function init() {
-  login()
   //hotkeys context
   const hotKeyContext = createContext()
 
@@ -46,8 +46,8 @@ function init() {
   //add event listener for add tag. Tag added by press Enter.
   inputNewTag.addEventListener("keypress", onKeyPressInputTag)
 
-  const auth = document.querySelector(".btn-google-login")
-  auth.addEventListener("click", (e) => login(e))
+  const authButton = document.querySelector(".btn-google-login")
+  authButton.addEventListener("click", (e) => auth.login(e))
 
   renderNotes()
 
@@ -62,45 +62,38 @@ function init() {
 //   content.appendChild(newDiv)
 // }
 
-async function login(e) {
-  if (e) {
-    e.preventDefault()
-    try {
-      const { success } = await api.getProfile()
-      if (success) {
-        window.location.href = `${URL_API}/auth/logout`
-      } else {
-        window.sessionStorage.setItem("pathBeforeAuth", window.location.href)
-        window.location.href = `${URL_API}/auth/google`
-      }
-    } catch (err) {
-      console.log(err)
-    }
-  } else {
-    try {
-      const { success, data: profile } = await api.getProfile()
-      if (success) {
-        //mount user profile
-        const path = window.sessionStorage.getItem("pathBeforeAuth")
-        if (path) {
-          window.location.href = path
-          window.sessionStorage.removeItem("pathBeforeAuth")
-        }
-        console.log()
-        renderProfile(profile)
-      }
-    } catch (err) {
-      console.log(err)
-    }
-  }
-}
-
-function renderProfile(profile) {
-  const name = document.querySelector(".auth-google__username")
-  name.innerText = profile.name
-  const button = document.querySelector(".btn-google-login")
-  button.innerHTML = "log out"
-}
+// async function login(e) {
+//   if (e) {
+//     e.preventDefault()
+//     try {
+//       const { success } = await api.getProfile()
+//       if (success) {
+//         window.location.href = `${URL_API}/auth/logout`
+//       } else {
+//         window.sessionStorage.setItem("pathBeforeAuth", window.location.href)
+//         window.location.href = `${URL_API}/auth/google`
+//       }
+//     } catch (err) {
+//       console.log(err)
+//     }
+//   } else {
+//     try {
+//       const { success, data: profile } = await api.getProfile()
+//       if (success) {
+//         //mount user profile
+//         const path = window.sessionStorage.getItem("pathBeforeAuth")
+//         if (path) {
+//           window.location.href = path
+//           window.sessionStorage.removeItem("pathBeforeAuth")
+//         }
+//         console.log()
+//         renderProfile(profile)
+//       }
+//     } catch (err) {
+//       console.log(err)
+//     }
+//   }
+// }
 
 function showSlidesCurrentNotes() {
   //if slides shows close them
