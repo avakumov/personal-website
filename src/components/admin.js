@@ -3,6 +3,7 @@ import { createContext } from "../helpers/hotkeys"
 import { ShowSlides } from "./slide"
 import { CURRENT_TAG_ID, SLIDES_ID, CLI_ID, TAGS_ID, CONTENT_ID } from "../globals"
 import { auth } from "../index"
+import {gongInit} from "./gong"
 
 //TODO relocate state
 const state = {
@@ -14,6 +15,7 @@ const state = {
 }
 
 function init() {
+  gongInit()
   //hotkeys context
   const hotKeyContext = createContext()
 

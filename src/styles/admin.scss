@@ -184,3 +184,34 @@
   left: 50%;
   transform: translate(-50%, -50%);
 }
+
+.timer-gong {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 300;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100px;
+  height: 50px;
+  padding: 10px 20px;
+  cursor: pointer;
+  background: linear-gradient(rgba(43, 43, 43, 0.2), rgba(0, 0, 0, 0.2)), url("../img/tomato.png") center / contain  no-repeat;
+  background-color: rgb(126, 7, 7);
+
+  &--active {
+    background-color: rgb(50, 83, 50);
+  }
+
+  &__content {
+    font-size: 30px;
+    color: rgba($color: #fff, $alpha: 0.7);
+    transition: 0.2s;
+  }
+
+  &__content:hover {
+    color: rgba($color: #fff, $alpha: 1);
+  }
+  
+}

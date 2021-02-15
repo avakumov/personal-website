@@ -8,7 +8,7 @@ import { Auth } from "./controllers/auth"
 import { renderProfile } from "./components/profile"
 
 //auth.init()
-
+//TODO create page success-auth
 export const auth = new Auth({
   loginUrl: `${URL_API}/auth/google`,
   logoutUrl: `${URL_API}/auth/logout`,
