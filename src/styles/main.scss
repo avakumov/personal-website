@@ -6,6 +6,9 @@
 @import 'admin.scss';
 
 
+a {
+  color:rgb(105, 87, 207);
+}
 
 @font-face {
   font-family: "Gotham-ligth";
@@ -22,10 +25,15 @@
   src: url("../fonts/Gotham-Book.woff2") format("woff2");
 }
 
+#posts {
+  max-width: 800px;
+}
+
 .page__header {
-  font-size: 120px;
-  line-height: 120px;
-  letter-spacing: -5px;
+  width: 70%;
+  font-size: 35px;
+  line-height: 50px;
+  letter-spacing: -1.5px;
   text-align: center;
   margin-top: 12px;
   color: $textColorContrast;
@@ -33,9 +41,9 @@
 }
 .page__text-block-title {
   color: $textColorContrast;
-  font-size: 28px;
+  font-size: 20px;
   letter-spacing: 1px;
-  line-height: 35px;
+  line-height: 30px;
   padding-bottom: 1rem;
 }
 .page__text-block-content {
@@ -49,7 +57,7 @@
 .page__text-block {
   width: auto;
   text-align: left;
-  padding: 30px;
+  padding: 20px;
 
     
   //animation on scroll
@@ -159,6 +167,12 @@ body {
 
 h3 {
   padding: 1rem 0 0.5rem 0;
+}
+li {
+  list-style-type: none;
+}
+.footer {
+  height: 100px;
 }
 
 @media (max-width: 1800px) {
